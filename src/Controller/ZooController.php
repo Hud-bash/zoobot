@@ -1,16 +1,30 @@
 <?php
 namespace App\Controller;
 
+use App\Service\ZooName;
 use App\Service\ZooWeb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ZooController extends AbstractController {
     private ZooWeb $zooWeb;
+    private ZooName $zooName;
 
-    public function __construct(ZooWeb $zooWeb)
+    public function __construct(ZooWeb $zooWeb, ZooName $zooName)
     {
-        $this->zooWeb = $zooWeb;
+        $this->zooName = $zooName;
+    }
+
+    /**
+     * @Route("/test", name="test")
+     */
+    public function Testing()
+    {
+        $this->zooName->CreateWalletName();
+//        return $this->render("market.html.twig", array (
+//                'market' => $market,
+//            )
+//        );
     }
 
     /**

@@ -1,9 +1,12 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Wallet;
 use Doctrine\ORM\EntityManagerInterface;
+use Nubs\RandomNameGenerator\Alliteration;
 
-class ZooName {
+class ZooName
+{
 
     private EntityManagerInterface $em;
     private string $firstNameGenUrl;
@@ -14,7 +17,22 @@ class ZooName {
         $this->firstNameGenUrl = $firstNameGenUrl;
     }
 
-    public function GenerateName(): string
+    private function GenerateName(): array
+    {
+        $getFirstName = $this->webGet();
+        $firstnameSplit = explode(' ', $getFirstName->name);
+
+        $lastNameGen = new Alliteration();
+
+        $firstName = $firstnameSplit[0] . ' ' . $firstnameSplit[1];
+        $lastName = $lastNameGen->getName();
+
+        $name[] = $firstName;
+        $name[] = $lastName;
+        return $name;
+    }
+
+    private function webGet()
     {
         $ch = curl_init();
         curl_setopt_array($ch, [
@@ -22,10 +40,45 @@ class ZooName {
                 CURLOPT_RETURNTRANSFER => 'true'
             ]
         );
-        $decoded = json_decode(curl_exec($ch));
-        $fullname = $decoded->name;
-        dump($fullname);die;
+        return json_decode(curl_exec($ch));
+    }
 
-        return '';
+    public function CreateWalletName()
+    {
+        $name = $this->GenerateName();
+        dump($name);die;
+    }
+
+    public function UpdateWallet()
+    {
+        $chestHistoryEntity = $this->em->getRepository("App:ChestHistory")->findAll();
+        $marketHistoryEntity = $this->em->getRepository("App:MarketHistory")->findAll();
+        $walletEntity = $this->em->getRepository("App:Wallet");
+
+        if(!$walletEntity->findBy(['wallet_id' => $marketHistoryEntity->buyer]))
+        {
+            $wallet = new Wallet();
+            $wallet->setWalletId($marketHistoryEntity->buyer);
+            $this->em->persist($wallet);
+            $this->em->flush();
+            $this->em->clear();
+        }
+        if(!$walletEntity->findBy(['wallet_id' => $marketHistoryEntity->seller]))
+        {
+            $wallet = new Wallet();
+            $wallet->setWalletId($marketHistoryEntity->seller);
+            $this->em->persist($wallet);
+            $this->em->flush();
+            $this->em->clear();
+        }
+        if(!$walletEntity->findBy(['wallet_id' => $chestHistoryEntity->owner]))
+        {
+            $wallet = new Wallet();
+            $wallet->setWalletId($chestHistoryEntity->owner);
+            $this->em->persist($wallet);
+            $this->em->flush();
+            $this->em->clear();
+        }
+
     }
 }
