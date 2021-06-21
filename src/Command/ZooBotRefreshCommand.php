@@ -1,0 +1,37 @@
+<?php
+namespace App\Command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use App\Service\ZooBotSQL;
+
+class ZooBotRefreshCommand extends Command {
+
+    public static $defaultName = 'zoobot:update';
+    private ZooBotSQL $zooBotSQL;
+
+    public function __construct(ZooBotSQL $zooBotSQL)
+    {
+        $this->zooBotSQL = $zooBotSQL;
+
+        parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->setDescription('Update all datatables from zookeeper');
+    }
+
+    protected function execute(InputInterface$input, OutputInterface $output): int
+    {
+        $output->writeln('');
+        $output->writeln('--Running Refresh--');
+        $output->writeln($this->zooBotSQL->UpdateNft());
+        $output->writeln($this->zooBotSQL->UpdateNftLock());
+        $output->writeln($this->zooBotSQL->UpdateMarket());
+        $output->writeln($this->zooBotSQL->UpdateMarketHistory());
+        $output->writeln($this->zooBotSQL->UpdateChestHistory());
+        return Command::SUCCESS;
+    }
+}

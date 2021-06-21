@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="main">
+        <table>
+            {% for nft in NftCollection %}
+                <tr class="altcolor">
+                    <td>
+                        {{nft.isLocked|raw}}
+                    </td>
+                    <td><image src={{nft.url}} style="width:40px;height:40px;"></image></td>
+                    <td>{{nft.id}}</td>
+                    <td>{{nft.name}}</td>
+                    <td>
+                        {{nft.category|raw}}
+                    </td>
+                    <td>
+                        {{nft.item|raw}}
+                    </td>
+                    <td>
+                        {{nft.level|raw}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

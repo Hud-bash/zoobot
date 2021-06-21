@@ -1,0 +1,71 @@
+@font-face {
+  font-family: 'LanaPixel';
+  src: url('./css/LanaPixel.woff2') format('woff2'),
+      url('./LanaPixel.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+    font-family: 'LanaPixel'; 
+    font-weight: normal; 
+    font-style: normal;
+  }
+  
+.sidenav {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #00a99d;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 6px 6px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  display: block;
+  font-size: 24pt;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 200px; /* Same as the width of the sidenav */
+  font-size: 19px;
+}
+
+.main h1 {
+  font-size: 45px;
+  margin-left: 200px;
+}
+
+tr:nth-child(even).altcolor {
+  background-color: silver;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  border: none;
+}
+
+th {
+  text-align: center;
+  font-size: 20px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}

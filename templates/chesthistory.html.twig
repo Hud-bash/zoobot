@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="main">
+        <table>
+            <tr>
+                <th>Nft ID</th>
+                <th>Type</th>
+                <th>Zoo Staked</th>
+                <th>Owner</th>
+                <th>Timestamp</th>
+                <th>Chain ID</th>
+                <th>Block</th>
+                <th>txHash</th>
+            </tr>
+            {% for c in chesthistory %}
+                <tr class="altcolor">
+                    <td>{{c.tokenId}}</td>
+                    <td>{{c.type}}</td>
+                    <td>{{c.price}}</td>
+                    <td><a href={{'https://www.wanscan.org/address/' ~ c.user}} target="_blank">{{c.user}}</a></td>
+                    <td>{{c.time}}</td>
+                    <td>{{c._id}}</td>
+                    <td>{{c.block}}</td>
+                    <td><a href={{'https://www.wanscan.org/tx/' ~ c.txHash}} target="_blank">{{c.txHash}}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
