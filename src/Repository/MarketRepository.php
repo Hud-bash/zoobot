@@ -19,6 +19,27 @@ class MarketRepository extends ServiceEntityRepository
         parent::__construct($registry, Market::class);
     }
 
+    public function CleanMarket(array $currentMarket)
+    {
+        //Purge table of any listings with nft_id
+        $this->createQueryBuilder('')
+            ->delete("App:Market", 'm')
+            ->where('m.nft NOT IN (:ids)')
+            ->setParameter('ids', $currentMarket)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findOneByNftId($value): ?Market
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.nft = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
     // /**
     //  * @return Market[] Returns an array of Market objects
     //  */

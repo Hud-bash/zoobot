@@ -33,11 +33,6 @@ class ChestHistory
     private $amount;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $owner;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $timestamp;
@@ -56,6 +51,12 @@ class ChestHistory
      * @ORM\Column(type="string", length=255)
      */
     private $txHash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="chestHistory")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $wallet;
 
     public function getId(): ?int
     {
@@ -94,18 +95,6 @@ class ChestHistory
     public function setAmount(int $amount): self
     {
         $this->amount = $amount;
-
-        return $this;
-    }
-
-    public function getOwner(): ?string
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(string $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }
@@ -154,6 +143,18 @@ class ChestHistory
     public function setTxHash(string $txHash): self
     {
         $this->txHash = $txHash;
+
+        return $this;
+    }
+
+    public function getWallet(): ?Wallet
+    {
+        return $this->wallet;
+    }
+
+    public function setWallet(?Wallet $wallet): self
+    {
+        $this->wallet = $wallet;
 
         return $this;
     }

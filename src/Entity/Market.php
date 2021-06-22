@@ -39,11 +39,6 @@ class Market
     private $expiration;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $seller;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $timestamp;
@@ -52,6 +47,12 @@ class Market
      * @ORM\Column(type="string", length=255)
      */
     private $chain_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="markets", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $seller;
 
     public function getId(): ?int
     {
@@ -106,18 +107,6 @@ class Market
         return $this;
     }
 
-    public function getSeller(): ?string
-    {
-        return $this->seller;
-    }
-
-    public function setSeller(string $seller): self
-    {
-        $this->seller = $seller;
-
-        return $this;
-    }
-
     public function getTimestamp(): ?\DateTimeInterface
     {
         return $this->timestamp;
@@ -138,6 +127,18 @@ class Market
     public function setChainId(string $chain_id): self
     {
         $this->chain_id = $chain_id;
+
+        return $this;
+    }
+
+    public function getSeller(): ?Wallet
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?Wallet $seller): self
+    {
+        $this->seller = $seller;
 
         return $this;
     }

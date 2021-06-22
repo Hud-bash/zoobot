@@ -20,7 +20,7 @@ class ZooController extends AbstractController {
      */
     public function Testing()
     {
-        $this->zooName->CreateWalletName();
+        $this->zooName->UpdateWallet();
 //        return $this->render("market.html.twig", array (
 //                'market' => $market,
 //            )

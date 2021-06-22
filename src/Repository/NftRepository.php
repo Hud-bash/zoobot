@@ -24,6 +24,16 @@ class NftRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('nft_id' => 'DESC'));
     }
 
+    public function findOneByNftId($value): Nft
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.nft_id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
     // /**
     //  * @return Nft[] Returns an array of Nft objects
     //  */

@@ -34,16 +34,6 @@ class MarketHistory
     private $currency;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $seller;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $buyer;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $timestamp;
@@ -62,6 +52,18 @@ class MarketHistory
      * @ORM\Column(type="string", length=255)
      */
     private $txHash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="sellHistory")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $seller;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="buyHistory")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $buyer;
 
     public function getId(): ?int
     {
@@ -100,30 +102,6 @@ class MarketHistory
     public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
-
-        return $this;
-    }
-
-    public function getSeller(): ?string
-    {
-        return $this->seller;
-    }
-
-    public function setSeller(string $seller): self
-    {
-        $this->seller = $seller;
-
-        return $this;
-    }
-
-    public function getBuyer(): ?string
-    {
-        return $this->buyer;
-    }
-
-    public function setBuyer(string $buyer): self
-    {
-        $this->buyer = $buyer;
 
         return $this;
     }
@@ -172,6 +150,30 @@ class MarketHistory
     public function setTxHash(string $txHash): self
     {
         $this->txHash = $txHash;
+
+        return $this;
+    }
+
+    public function getSeller(): ?Wallet
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?Wallet $seller): self
+    {
+        $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getBuyer(): ?Wallet
+    {
+        return $this->buyer;
+    }
+
+    public function setBuyer(?Wallet $buyer): self
+    {
+        $this->buyer = $buyer;
 
         return $this;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Entity\MarketHistory;
 use App\Entity\Wallet;
 use Doctrine\ORM\EntityManagerInterface;
 use Nubs\RandomNameGenerator\Alliteration;
@@ -51,30 +52,30 @@ class ZooName
 
     public function UpdateWallet()
     {
-        $chestHistoryEntity = $this->em->getRepository("App:ChestHistory")->findAll();
-        $marketHistoryEntity = $this->em->getRepository("App:MarketHistory")->findAll();
+        $marketHistoryEntity = $this->em->getRepository("App:MarketHistory");
+        $chestHistoryEntity = $this->em->getRepository("App:ChestHistory")->getUniqueWallets();
         $walletEntity = $this->em->getRepository("App:Wallet");
-
-        if(!$walletEntity->findBy(['wallet_id' => $marketHistoryEntity->buyer]))
+        
+        if(!$walletEntity->findBy(['wallet_id' => $marketHistoryEntity]))
         {
             $wallet = new Wallet();
-            $wallet->setWalletId($marketHistoryEntity->buyer);
+            $wallet->setWalletId($x->getWalletId);
             $this->em->persist($wallet);
             $this->em->flush();
             $this->em->clear();
         }
-        if(!$walletEntity->findBy(['wallet_id' => $marketHistoryEntity->seller]))
+        if(!$x = $walletEntity->findBy(['wallet_id' => $marketHistoryEntity]))
         {
             $wallet = new Wallet();
-            $wallet->setWalletId($marketHistoryEntity->seller);
+            $wallet->setWalletId($x->getWalletId);
             $this->em->persist($wallet);
             $this->em->flush();
             $this->em->clear();
         }
-        if(!$walletEntity->findBy(['wallet_id' => $chestHistoryEntity->owner]))
+        if(!$x = $walletEntity->findBy(['wallet_id' => $chestHistoryEntity->owner]))
         {
             $wallet = new Wallet();
-            $wallet->setWalletId($chestHistoryEntity->owner);
+            $wallet->setWalletId($x->getWalletId);
             $this->em->persist($wallet);
             $this->em->flush();
             $this->em->clear();
