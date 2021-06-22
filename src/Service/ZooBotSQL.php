@@ -65,13 +65,13 @@ class ZooBotSQL {
             //ID List to be used at the end to clear market table of items no longer in market
             $currentIds[] = $row->tokenId;
 
-            //Create objects for the NFT & market entry.
+            //Create objects for the NFT & Wallet.
             $nft = $this->MakeNft($row->tokenId);
-            $marketEntry = $this->em->getRepository('App:Market')->findOneByNftId($row->tokenId);
-
             $wallet = $this->MakeWallet($row->owner);
 
             //if the entry is null, we create a new Market object and insert into the NFT
+            $marketEntry = $this->em->getRepository('App:Market')->findOneByNftId($row->tokenId);
+
             if(!$marketEntry)
             {
                 $market = new Market();
@@ -146,7 +146,7 @@ class ZooBotSQL {
                 $this->em->clear();
             }
         }
-        return 'Market history guud.';
+        return 'Market history gud.';
     }
 
     public function UpdateChestHistory(): string
@@ -202,12 +202,17 @@ class ZooBotSQL {
         //check if wallet id exists in Wallet table.  Add if not exist.
         if(!$wallet)
         {
+                                                                                                                        echo ('---------------SAVING NEW WALLET MakeWallet()--------------');
+                                                                                                                        echo(PHP_EOL);
             $wallet = new Wallet();
             $wallet->setWalletId($id);
             $this->em->persist($wallet);
             $this->em->flush();
-            $this->em->clear();
+                                                                                                                        echo ('---------------NEW WALLET SAVED - Leaving MakeWallet()--------------');
+                                                                                                                        echo(PHP_EOL);
         }
+                                                                                                                        echo ('---------------WALLET EXISTS - Leaving MakeWallet()--------------');
+                                                                                                                        echo(PHP_EOL);
         return $this->em->getRepository('App:Wallet')->findOneBy(['wallet_id' => $id]);
     }
 
@@ -218,6 +223,8 @@ class ZooBotSQL {
 
         if(!$nft)
         {
+                                                                                                                        echo ('---------------SAVING NEW NFT MakeNft()--------------');
+                                                                                                                        echo(PHP_EOL);
             foreach ($rpcUpdates as $row)
             {
                 if($row->tokenId == $id)
@@ -240,10 +247,15 @@ class ZooBotSQL {
 
                     $this->em->persist($nft);
                     $this->em->flush();
-                    $this->em->clear();
+                                                                                                                        echo ('---------------NEW NFT SAVED - Leaving MakeNft()--------------');
+                                                                                                                        echo(PHP_EOL);
                 }
             }
         }
+
+                                                                                                                        echo ('---------------NFT EXISTS - Leaving MakeNft()--------------');
+                                                                                                                        echo(PHP_EOL);
+
         return $this->em->getRepository('App:Nft')->findOneBy(['nft_id' => $id]);
     }
 }

@@ -106,7 +106,8 @@ class Nft
     private $imgURL;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="nft")
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="nfts")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $wallet;
 

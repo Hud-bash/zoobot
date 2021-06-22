@@ -22,50 +22,26 @@ class Wallet
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    public string $wallet_id;
+    public $wallet_id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $animal;
+    private $animal;
 
     /**
      * @ORM\OneToMany(targetEntity=Nft::class, mappedBy="wallet")
      */
-    private Collection $nft;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Market::class, mappedBy="seller")
-     */
-    private Collection $market;
-
-    /**
-     * @ORM\OneToMany(targetEntity=ChestHistory::class, mappedBy="wallet")
-     */
-    private Collection $chestHistory;
-
-    /**
-     * @ORM\OneToMany(targetEntity=MarketHistory::class, mappedBy="seller")
-     */
-    private $sellHistory;
-
-    /**
-     * @ORM\OneToMany(targetEntity=MarketHistory::class, mappedBy="buyer")
-     */
-    private $buyHistory;
+    private $nfts;
 
     public function __construct()
     {
-        $this->nft = new ArrayCollection();
-        $this->market = new ArrayCollection();
-        $this->chestHistory = new ArrayCollection();
-        $this->sellHistory = new ArrayCollection();
-        $this->buyHistory = new ArrayCollection();
+        $this->nfts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,15 +88,15 @@ class Wallet
     /**
      * @return Collection|Nft[]
      */
-    public function getNft(): Collection
+    public function getNfts(): Collection
     {
-        return $this->nft;
+        return $this->nfts;
     }
 
     public function addNft(Nft $nft): self
     {
-        if (!$this->nft->contains($nft)) {
-            $this->nft[] = $nft;
+        if (!$this->nfts->contains($nft)) {
+            $this->nfts[] = $nft;
             $nft->setWallet($this);
         }
 
@@ -129,130 +105,10 @@ class Wallet
 
     public function removeNft(Nft $nft): self
     {
-        if ($this->nft->removeElement($nft)) {
+        if ($this->nfts->removeElement($nft)) {
             // set the owning side to null (unless already changed)
             if ($nft->getWallet() === $this) {
                 $nft->setWallet(null);
-            }
-        }
-
-        return $this;
-    }
-
-      /**
-     * @return Collection|Market[]
-     */
-    public function getMarket(): Collection
-    {
-        return $this->market;
-    }
-
-    public function addMarket(Market $market): self
-    {
-        if (!$this->market->contains($market)) {
-            $this->market[] = $market;
-            $market->setSeller($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMarket(Market $market): self
-    {
-        if ($this->market->removeElement($market)) {
-            // set the owning side to null (unless already changed)
-            if ($market->getSeller() === $this) {
-                $market->setSeller(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ChestHistory[]
-     */
-    public function getChestHistory(): Collection
-    {
-        return $this->chestHistory;
-    }
-
-    public function addChestHistory(ChestHistory $chestHistory): self
-    {
-        if (!$this->chestHistory->contains($chestHistory)) {
-            $this->chestHistory[] = $chestHistory;
-            $chestHistory->setWallet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChestHistory(ChestHistory $chestHistory): self
-    {
-        if ($this->chestHistory->removeElement($chestHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($chestHistory->getWallet() === $this) {
-                $chestHistory->setWallet(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|MarketHistory[]
-     */
-    public function getSellHistory(): Collection
-    {
-        return $this->sellHistory;
-    }
-
-    public function addSellHistory(MarketHistory $sellHistory): self
-    {
-        if (!$this->sellHistory->contains($sellHistory)) {
-            $this->sellHistory[] = $sellHistory;
-            $sellHistory->setSeller($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSellHistory(MarketHistory $sellHistory): self
-    {
-        if ($this->sellHistory->removeElement($sellHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($sellHistory->getSeller() === $this) {
-                $sellHistory->setSeller(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|MarketHistory[]
-     */
-    public function getBuyHistory(): Collection
-    {
-        return $this->buyHistory;
-    }
-
-    public function addBuyHistory(MarketHistory $buyHistory): self
-    {
-        if (!$this->buyHistory->contains($buyHistory)) {
-            $this->buyHistory[] = $buyHistory;
-            $buyHistory->setBuyer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBuyHistory(MarketHistory $buyHistory): self
-    {
-        if ($this->buyHistory->removeElement($buyHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($buyHistory->getBuyer() === $this) {
-                $buyHistory->setBuyer(null);
             }
         }
 

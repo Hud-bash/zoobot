@@ -11,11 +11,11 @@ class ZooBotAPI {
 
     public function __construct($baseUrl) {
         $this->baseUrl = $baseUrl;
-        $this->nftJson = $this->webGet("nft");
-        $this->nftLockJson = $this->webGet("nftInfo");
-        $this->marketJson = $this->webGet("zookeeper");
-        $this->marketHistoryJson = $this->webGet("market");
-        $this->chestHistoryJson = $this->webGet("chest");
+        $this->GetNft();
+        $this->GetNftLock();
+        $this->GetMarket();
+        $this->GetMarketHistory();
+        $this->GetChestHistory();
     }
 
     public function webGet(string $suffix) {
