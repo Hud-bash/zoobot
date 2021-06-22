@@ -54,13 +54,13 @@ class MarketHistory
     private $txHash;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="sellHistory")
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="sellHistory", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $seller;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="buyHistory")
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="buyHistory", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $buyer;

@@ -22,7 +22,7 @@ class ZooBotSQL {
 
     public function UpdateNft(): string
     {
-        $updates = $this->zapi->GetNft();
+        $updates = $this->zapi->nftJson;
         $table = $this->em->getRepository("App:Nft");
                
         foreach($updates as $row)
@@ -31,7 +31,6 @@ class ZooBotSQL {
 
             if (!$exists)
             {
-                echo('NFT NOT EXIST....CREATING NOW');
                 $this->MakeNft($row->tokenId);
             }
         }
@@ -41,7 +40,7 @@ class ZooBotSQL {
 
     public function UpdateNftLock(): string
     {
-        $updates = $this->zapi->GetNftLock();
+        $updates = $this->zapi->nftLockJson;
         $table = $this->em->getRepository("App:Nft");
         $currentIds = array();
 
@@ -49,34 +48,15 @@ class ZooBotSQL {
         {
             $currentIds[] = $row->tokenId;
         }
-        
-        // Set isLocked to true (1) for nft_ids in json webget
-        $table->createQueryBuilder('')
-        ->update("App:Nft", 'e')
-        ->set('e.isLocked', 1)
-        ->where('e.nft_id IN (:ids)')
-        ->setParameter('ids', $currentIds)
-        ->getQuery()
-        ->execute();
 
-        // Set isLocked to false (0) for nft_ids no longer present in json webget
-        $table->createQueryBuilder('')
-        ->update("App:Nft", 'e')
-        ->set('e.isLocked', 0)
-        ->where('e.isLocked = 1 AND e.nft_id NOT IN (:ids)')
-        ->setParameter('ids', $currentIds)
-        ->getQuery()
-        ->execute();
-
-        $this->em->flush();
-        $this->em->clear();
+        $table->UpdateLockState($currentIds);
 
         return 'Locked NFTs analyzed --bzzzrrrrrrz--';
     }
 
     public function UpdateMarket(): string
     {
-        $updates = $this->zapi->GetMarket();
+        $updates = $this->zapi->marketJson;
         $table = $this->em->getRepository("App:Market");
         $currentIds = array();
 
@@ -94,7 +74,6 @@ class ZooBotSQL {
             //if the entry is null, we create a new Market object and insert into the NFT
             if(!$marketEntry)
             {
-                echo ('MARKET ENTRY DOES NOT EXIST.....CREATING');
                 $market = new Market();
                 $market->setPrice($row->price);
                 $market->setCurrency($row->token);
@@ -133,7 +112,7 @@ class ZooBotSQL {
 
     public function UpdateMarketHistory(): string
     {
-        $updates = $this->zapi->GetMarketHistory();
+        $updates = $this->zapi->marketHistoryJson;
         $table = $this->em->getRepository("App:MarketHistory");
 
         foreach($updates as $row)
@@ -172,7 +151,7 @@ class ZooBotSQL {
 
     public function UpdateChestHistory(): string
     {
-        $updates = $this->zapi->GetChestHistory();
+        $updates = $this->zapi->chestHistoryJson;
         $table = $this->em->getRepository("App:ChestHistory");
 
         foreach($updates as $row)
@@ -190,7 +169,7 @@ class ZooBotSQL {
                 $chestHistory = new ChestHistory();
                 $chestHistory->setType($row->type);
                 $chestHistory->setAmount($row->price);
-                $chestHistory->setOwner($row->user);
+                $chestHistory->setWallet($this->MakeWallet($row->user));
                 $chestHistory->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s', $correctDate));
                 $chestHistory->setChainId($row->_id);
                 $chestHistory->setBlock($row->block);
@@ -199,13 +178,13 @@ class ZooBotSQL {
                 if ($row->tokenId == 0)
                 {   
                     //Save new chest history with NULL nft_id.  This can happen when a silver chest does not produce anything.
-                    $this->em->persist($insertrow);
+                    $this->em->persist($chestHistory);
                 }
                 else
                 {
                     //Save new chest history to existing NFT
-                    $nft = $this->em->getRepository("App:Nft")->findOneBy(['nft_id' => $row->tokenId]);
-                    $nft->setChestHistory($insertrow);
+                    $nft = $this->MakeNft($row->tokenId);
+                    $nft->setChestHistory($chestHistory);
 
                     $this->em->persist($nft);
                 }
@@ -234,7 +213,7 @@ class ZooBotSQL {
 
     public function MakeNft(int $id): Nft
     {
-        $rpcUpdates = $this->zapi->GetNft();
+        $rpcUpdates = $this->zapi->nftJson;
         $nft = $this->em->getRepository('App:Nft')->findOneBy(['nft_id' => $id]);
 
         if(!$nft)

@@ -34,6 +34,27 @@ class NftRepository extends ServiceEntityRepository
             ;
     }
 
+    public function UpdateLockState(array $locked)
+    {
+        // Set isLocked to true (1) for nft_ids in json webget
+        $this->createQueryBuilder('')
+            ->update("App:Nft", 'e')
+            ->set('e.isLocked', 1)
+            ->where('e.nft_id IN (:ids)')
+            ->setParameter('ids', $locked)
+            ->getQuery()
+            ->getResult();
+
+        // Set isLocked to false (0) for nft_ids no longer present in json webget
+        $this->createQueryBuilder('')
+            ->update("App:Nft", 'e')
+            ->set('e.isLocked', 0)
+            ->where('e.isLocked = 1 AND e.nft_id NOT IN (:ids)')
+            ->setParameter('ids', $locked)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Nft[] Returns an array of Nft objects
     //  */

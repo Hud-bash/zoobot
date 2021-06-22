@@ -2,10 +2,20 @@
 namespace App\Service;
 
 class ZooBotAPI {
-    public $baseUrl;
+    public string $baseUrl;
+    public $marketJson;
+    public $marketHistoryJson;
+    public $nftJson;
+    public $chestHistoryJson;
+    public $nftLockJson;
 
-    public function __construct(string $baseUrl) {
+    public function __construct($baseUrl) {
         $this->baseUrl = $baseUrl;
+        $this->nftJson = $this->webGet("nft");
+        $this->nftLockJson = $this->webGet("nftInfo");
+        $this->marketJson = $this->webGet("zookeeper");
+        $this->marketHistoryJson = $this->webGet("market");
+        $this->chestHistoryJson = $this->webGet("chest");
     }
 
     public function webGet(string $suffix) {
@@ -19,27 +29,27 @@ class ZooBotAPI {
     }
 
     public function GetMarket() {
-        $r = $this->webGet("zookeeper");   
-        return $r;
+        $this->marketJson = $this->webGet("zookeeper");
+        return $this->marketJson;
     }
 
     public function GetMarketHistory() {
-        $r = $this->webGet("market");
-        return $r;
+        $this->marketHistoryJson = $this->webGet("market");
+        return $this->marketHistoryJson;
     }
 
     public function GetChestHistory() {
-        $r = $this->webGet("chest");
-        return $r;
+        $this->chestHistoryJson = $this->webGet("chest");
+        return $this->chestHistoryJson;
     }
 
     public function GetNft() {
-        $r = $this->webGet("nft");
-        return $r;
+        $this->nftJson = $this->webGet("nft");
+        return $this->nftJson;
     }
 
     public function GetNftLock() {
-        $r = $this->webGet("nftInfo");
-        return $r;
+        $this->nftLockJson = $this->webGet("nftInfo");
+        return $this->nftLockJson;
     }
 }
