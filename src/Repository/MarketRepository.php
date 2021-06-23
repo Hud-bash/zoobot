@@ -30,7 +30,7 @@ class MarketRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneByNftId($value): ?Market
+    public function findByNftId($value): ?Market
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.nft = :val')

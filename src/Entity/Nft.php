@@ -105,12 +105,6 @@ class Nft
      */
     private $imgURL;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="nfts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $wallet;
-
     public function __construct()
     {
         $this->marketHistory = new ArrayCollection();
@@ -354,18 +348,6 @@ class Nft
     public function setImgURL(string $imgURL): self
     {
         $this->imgURL = $imgURL;
-
-        return $this;
-    }
-
-    public function getWallet(): ?Wallet
-    {
-        return $this->wallet;
-    }
-
-    public function setWallet(?Wallet $wallet): self
-    {
-        $this->wallet = $wallet;
 
         return $this;
     }

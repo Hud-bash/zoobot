@@ -13,6 +13,7 @@ class ZooController extends AbstractController {
     public function __construct(ZooWeb $zooWeb, ZooName $zooName)
     {
         $this->zooName = $zooName;
+        $this->zooWeb = $zooWeb;
     }
 
     /**

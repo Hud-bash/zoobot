@@ -19,6 +19,19 @@ class WalletRepository extends ServiceEntityRepository
         parent::__construct($registry, Wallet::class);
     }
 
+    /**
+    * @return Wallet[] Returns an array of Wallet objects
+    */
+    public function FindNullNames()
+    {
+        return $this->createQueryBuilder('w')
+            ->select('w')
+            ->Where('w.name is null OR w.animal is null')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Wallet[] Returns an array of Wallet objects
     //  */

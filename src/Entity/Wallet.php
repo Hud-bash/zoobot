@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\WalletRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,14 +32,8 @@ class Wallet
      */
     private $animal;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Nft::class, mappedBy="wallet")
-     */
-    private $nfts;
-
     public function __construct()
     {
-        $this->nfts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,36 +73,6 @@ class Wallet
     public function setAnimal(string $animal): self
     {
         $this->animal = $animal;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Nft[]
-     */
-    public function getNfts(): Collection
-    {
-        return $this->nfts;
-    }
-
-    public function addNft(Nft $nft): self
-    {
-        if (!$this->nfts->contains($nft)) {
-            $this->nfts[] = $nft;
-            $nft->setWallet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNft(Nft $nft): self
-    {
-        if ($this->nfts->removeElement($nft)) {
-            // set the owning side to null (unless already changed)
-            if ($nft->getWallet() === $this) {
-                $nft->setWallet(null);
-            }
-        }
 
         return $this;
     }

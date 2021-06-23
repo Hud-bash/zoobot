@@ -25,8 +25,6 @@ class ZooBotSnipeCommand extends Command {
 
     protected function execute(InputInterface$input, OutputInterface $output): int
     {
-        $output->writeln('');
-        $output->writeln('--Running Test Command--');
         $output->writeln($this->zooBotSQL->UpdateMarket());
         return Command::SUCCESS;
     }

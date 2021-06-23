@@ -50,7 +50,6 @@ class Market
 
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="markets", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $seller;
 
