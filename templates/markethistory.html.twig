@@ -4,27 +4,21 @@
     <div class="main">
         <table>
             <tr>
-                <th>Nft ID</th>
+                <th>Nft</th>
                 <th>Price</th>
                 <th>Currency</th>
                 <th>Seller</th>
                 <th>Buyer</th>
                 <th>Timestamp</th>
-                <th>Chain ID</th>
-                <th>Block</th>
-                <th>txHash</th>
             </tr>
-            {% for m in markethistory %}
+            {% for m in MarketHistoryCollection.history %}
                 <tr class="altcolor">
-                    <td>{{m.tokenId}}</td>
+                    <td>{{m.nft}}</td>
                     <td>{{m.price}}</td>
-                    <td>{{m.symbol}}</td>
-                    <td><a href={{'https://www.wanscan.org/address/' ~ m.seller}} target="_blank">{{m.seller}}</a></td>
-                    <td><a href={{'https://www.wanscan.org/address/' ~ m.buyer}} target="_blank">{{m.buyer}}</a></td>
-                    <td>{{m.time}}</td>
-                    <td>{{m._id}}</td>
-                    <td>{{m.blockNumber}}</td>
-                    <td><a href={{'https://www.wanscan.org/tx/' ~ m.txHash}} target="_blank">{{m.txHash}}</a></td>              
+                    <td>{{m.currency}}</td>
+                    <td>{{m.seller}}</td>
+                    <td>{{m.buyer}}</td>
+                    <td><a href={{'https://www.wanscan.org/tx/' ~ m.txHash}} target="_blank">{{m.timestamp | date('Y-m-d H:i:s')}}</a></td>
                 </tr>
             {% endfor %}
         </table>

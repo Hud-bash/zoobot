@@ -19,6 +19,35 @@ class MarketHistoryRepository extends ServiceEntityRepository
         parent::__construct($registry, MarketHistory::class);
     }
 
+    public function findAllDescending(string $column): array
+    {
+        return $this->findBy(array(), array($column => 'DESC'));
+    }
+
+    public function topBuyer(int $x)
+    {
+        return $this->createQueryBuilder('m')
+            ->select('count(m.seller) as count, w.wallet_id')
+            ->innerJoin('App:Wallet', 'w', 'WITH', 'm.seller = w.id')
+            ->groupBy('w.wallet_id')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults($x)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function topSeller(int $x)
+    {
+        return $this->createQueryBuilder('m')
+            ->select('count(m.buyer) as count, w.wallet_id')
+            ->innerJoin('App:Wallet', 'w', 'WITH', 'm.buyer = w.id')
+            ->groupBy('w.wallet_id')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults($x)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return MarketHistory[] Returns an array of MarketHistory objects
     //  */

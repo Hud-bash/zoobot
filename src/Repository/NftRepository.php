@@ -19,9 +19,9 @@ class NftRepository extends ServiceEntityRepository
         parent::__construct($registry, Nft::class);
     }
 
-    public function findAllDescending(): array
+    public function findAllDescending(string $column): array
     {
-        return $this->findBy(array(), array('nft_id' => 'DESC'));
+        return $this->findBy(array(), array($column => 'DESC'));
     }
 
     public function findOneByNftId($value): Nft

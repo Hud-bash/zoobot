@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'LanaPixel';
   src: url('./css/LanaPixel.woff2') format('woff2'),
-      url('./LanaPixel.woff') format('woff');
+      url('./css/LanaPixel.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -46,6 +46,12 @@ body {
 .main h1 {
   font-size: 45px;
   margin-left: 200px;
+  font-weight: normal;
+}
+.main h2 {
+  font-size: 30px;
+  margin-left: 100px;
+  font-weight: normal;
 }
 
 tr:nth-child(even).altcolor {

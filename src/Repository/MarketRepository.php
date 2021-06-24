@@ -40,6 +40,11 @@ class MarketRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findAllDescending(string $column): array
+    {
+        return $this->findBy(array(), array($column => 'DESC'));
+    }
+
     // /**
     //  * @return Market[] Returns an array of Market objects
     //  */

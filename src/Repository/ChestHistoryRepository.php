@@ -19,6 +19,23 @@ class ChestHistoryRepository extends ServiceEntityRepository
         parent::__construct($registry, ChestHistory::class);
     }
 
+    public function findAllDescending(string $column): array
+    {
+        return $this->findBy(array(), array($column => 'DESC'));
+    }
+
+    public function topChesties(int $x)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('count(c.wallet) as count, w.wallet_id, w.name, w.animal')
+            ->innerJoin('App:Wallet', 'w', 'WITH', 'c.wallet = w.id')
+            ->groupBy('w.wallet_id, w.name, w.animal')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults($x)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return ChestHistory[] Returns an array of ChestHistory objects
     //  */

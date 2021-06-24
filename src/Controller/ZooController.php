@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Service\ZooName;
 use App\Service\ZooWeb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ZooController extends AbstractController {
@@ -21,7 +22,7 @@ class ZooController extends AbstractController {
      */
     public function Testing()
     {
-        $this->zooName->UpdateWallet();
+        $this->zooName->UpdateNullNames();
 //        return $this->render("market.html.twig", array (
 //                'market' => $market,
 //            )
@@ -33,10 +34,12 @@ class ZooController extends AbstractController {
      */
     public function Market()
     {
-//        return $this->render("market.html.twig", array (
-//                'market' => $market,
-//            )
-//        );
+        $MarketCollection = $this->zooWeb->RenderMarket();
+
+        return $this->render("market.html.twig", array (
+                'MarketCollection' => $MarketCollection,
+            )
+        );
     }
 
     /**
@@ -44,29 +47,33 @@ class ZooController extends AbstractController {
      */
     public function MarketHistory()
     {
-//        return $this->render("markethistory.html.twig", array (
-//                'markethistory' => $markethistory,
-//            )
-//        );
+        $MarketHistoryCollection = $this->zooWeb->RenderMarketHistory();
+
+        return $this->render("markethistory.html.twig", array (
+                'MarketHistoryCollection' => $MarketHistoryCollection,
+            )
+        );
     }
 
     /**
      * @Route("/chest-history", name="chest-history")
      */
-    public function ChestHistory()
+    public function ChestHistory(): Response
     {
-//        return $this->render("chesthistory.html.twig", array (
-//                'chesthistory' => $chesthistory,
-//            )
-//        );
+        $ChestCollection = $this->zooWeb->RenderChestHistory();
+
+        return $this->render("chesthistory.html.twig", array (
+                'ChestCollection' => $ChestCollection,
+            )
+        );
     }
 
     /**
      * @Route("/nft", name="nft")
      */
-    public function Nft()
+    public function Nft(): Response
     {
-        $NftCollection = $this->zooWeb->UpdateNFT();
+        $NftCollection = $this->zooWeb->RenderNFT();
 
         return $this->render("nft.html.twig", array (
             'NftCollection' => $NftCollection,

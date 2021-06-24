@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\MarketHistory;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ZooWeb
@@ -16,10 +17,9 @@ class ZooWeb
         $this->em = $em;
     }
 
-    public function UpdateNFT(): array
+    public function RenderNFT(): array
     {
-        $inNft = $this->em->getRepository('App:Nft')->findAllDescending();
-
+        $inNft = $this->em->getRepository('App:Nft')->findAllDescending('nft_id');
         $outNft = array();
 
         foreach ($inNft as $nft)
@@ -33,13 +33,96 @@ class ZooWeb
             "level" => $this->setLevel($nft->getLevel()),
             "isLocked" => $this->setLock($nft->getIsLocked())
         );
+
         $outNft[] = $add;
         }
 
         return $outNft;
     }
 
-    public function setCategory(int $i): String
+    public function RenderChestHistory(): array
+    {
+        $inHistory = $this->em->getRepository('App:ChestHistory')->findAllDescending('block');
+        $chests = array();
+        $top20 = $this->em->getRepository('App:ChestHistory')->topChesties(20);
+
+        foreach ($inHistory as $chest)
+        {
+            $nft = (is_null($chest->getNft()) ? "" : $chest->getNft()->getName());
+            $wallet = (is_null($chest->getWallet()) ? null : $chest->getWallet());
+
+            $add = array(
+                'txHash' => $chest->getTxHash(),
+                'timestamp' => $chest->getTimestamp(),
+                'nft' => $nft,
+                'wallet_id' => $wallet->getWalletId(),
+                'type' => $this->setChestType($chest->getType(), $nft),
+                'amount' => $chest->getAmount(),
+                'name' => $wallet->getName(),
+                'animal' => $wallet->getAnimal()
+            );
+
+            $chests[] = $add;
+        };
+
+        return array('history' => $chests, 'topchesties' => $top20);
+    }
+
+    public function RenderMarket(): array
+    {
+        $inMarket = $this->em->getRepository('App:Market')->findAllDescending('timestamp');
+        $markets = array();
+
+        foreach ($inMarket as $market)
+        {
+            $nft = $market->getNft();
+            $seller = $market->getSeller();
+
+            $add = array(
+                'nft' => $nft->getName() . '[' . $nft->getNftId() . ']',
+                'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
+                'price' => $market->getPrice() + 0,
+                'currency' => $market->getCurrency(),
+                'timestamp' => $market->getTimestamp(),
+                'chainId' => $market->getChainId()
+            );
+            $markets[] = $add;
+        }
+        return $markets;
+    }
+
+    public function RenderMarketHistory(): array
+    {
+        $inHistory = $this->em->getRepository('App:MarketHistory')->findAllDescending('timestamp');
+        $markets = array();
+
+        foreach ($inHistory as $market)
+        {
+            $nft = $market->getNft();
+            $buyer = $market->getBuyer();
+            $seller = $market->getSeller();
+
+            $add = array(
+                'nft' => $nft->getName() . '[' . $nft->getNftId() . ']',
+                'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
+                'buyer' => $buyer->getName() . ' ' . $buyer->getAnimal(),
+                'price' => $market->getPrice(),
+                'currency' => $market->getCurrency(),
+                'timestamp' => $market->getTimestamp(),
+                'chainId' => $market->getChainId(),
+                'txHash' => $market->getTxHash()
+            );
+            $markets[] = $add;
+        }
+        return array(
+            'history' => $markets,
+            'topseller' => $this->em->getRepository('App:MarketHistory')->topSeller(10),
+            'topbuyer' => $this->em->getRepository('App:MarketHistory')->topBuyer(10)
+        );
+
+    }
+
+    private function setCategory(int $i): String
     {
         switch ($i)
         {
@@ -61,7 +144,7 @@ class ZooWeb
 
     }
 
-    public function setLock(int $i): String
+    private function setLock(int $i): String
     {
         switch ($i)
         {
@@ -74,7 +157,7 @@ class ZooWeb
         }
     }
 
-    public function setClass(int $i): String
+    private function setClass(int $i): String
     {
         switch ($i)
         {
@@ -93,7 +176,7 @@ class ZooWeb
         }
     }
 
-    public function setLevel(int $i): String
+    private function setLevel(int $i): String
     {
         switch ($i) {
             case ($i <= 3):
@@ -109,4 +192,25 @@ class ZooWeb
                 return strval($i);
         }
     }
+
+    private function setChestType(string $type, $nft): String
+    {
+        if(str_contains($type, 'ilver'))
+        {
+            if($nft == "")
+            {
+                return '<img src="' . '/img/silverboxfail42x42.png"><' . '/img>';
+            }
+            else
+            {
+                return '<img src="' . '/img/silverbox42x42.png"><' . '/img>';
+            }
+        }
+        else
+        {
+            return '<img src="' . '/img/goldenbox42x42.png"><' . '/img>';
+        }
+    }
+
+
 }

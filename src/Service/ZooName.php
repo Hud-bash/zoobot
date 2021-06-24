@@ -39,9 +39,7 @@ class ZooName
         $firstName = $firstnameSplit[0] . ' ' . $firstnameSplit[1];
         $lastName = $lastNameGen->getName();
 
-        $name = array('name' => $firstName, 'animal' => $lastName);
-
-        return $name;
+        return array('name' => $firstName, 'animal' => $lastName);
     }
 
     protected function SetWalletName(Wallet $wallet): Wallet

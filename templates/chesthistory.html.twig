@@ -4,25 +4,19 @@
     <div class="main">
         <table>
             <tr>
-                <th>Nft ID</th>
-                <th>Type</th>
-                <th>Zoo Staked</th>
+                <th>Nft</th>
+                <th></th>
+                <th>Zoo</th>
                 <th>Owner</th>
                 <th>Timestamp</th>
-                <th>Chain ID</th>
-                <th>Block</th>
-                <th>txHash</th>
             </tr>
-            {% for c in chesthistory %}
+            {% for c in ChestCollection.history %}
                 <tr class="altcolor">
-                    <td>{{c.tokenId}}</td>
-                    <td>{{c.type}}</td>
-                    <td>{{c.price}}</td>
-                    <td><a href={{'https://www.wanscan.org/address/' ~ c.user}} target="_blank">{{c.user}}</a></td>
-                    <td>{{c.time}}</td>
-                    <td>{{c._id}}</td>
-                    <td>{{c.block}}</td>
-                    <td><a href={{'https://www.wanscan.org/tx/' ~ c.txHash}} target="_blank">{{c.txHash}}</a></td>
+                    <td>{{c.nft}}</td>
+                    <td>{{c.type | raw}}</td>
+                    <td>{{c.amount}}</td>
+                    <td><a href={{'https://www.wanscan.org/address/' ~ c.wallet_id}} target="_blank">{{c.name ~ ' ' ~ c.animal}}</a></td>
+                    <td><a href={{'https://www.wanscan.org/tx/' ~ c.txHash}} target="_blank">{{c.timestamp | date('Y-m-d H:i:s')}}</a></td>
                 </tr>
             {% endfor %}
         </table>

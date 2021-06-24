@@ -4,23 +4,19 @@
     <div class="main">
         <table>
             <tr>
-                <th>Nft ID</th>
+                <th>Nft</th>
                 <th>Price</th>
                 <th>Currency</th>
-                <th>Expiration</th>
                 <th>Seller</th>
                 <th>Timestamp</th>
-                <th>Chain ID</th>
             </tr>
-            {% for m in market.markets %}
+            {% for m in MarketCollection %}
                 <tr class="altcolor">
-                    <td>{{m.tokenId}}</td>
+                    <td>{{m.nft}}</td>
                     <td>{{m.price}}</td>
-                    <td><a href={{'https://www.wanscan.org/token/' ~ m.token}} target="_blank">{{m.token}}</a></td>
-                    <td>{{m.expiration}}</td>
-                    <td><a href={{'https://www.wanscan.org/address/' ~ m.owner}} target="_blank">{{m.owner}}</a></td>
-                    <td>{{m.createTime}}</td>
-                    <td>{{m.orderId}}</td>
+                    <td>{{m.currency}}</td>
+                    <td>{{m.seller}}</td>
+                    <td>{{m.timestamp | date('Y-m-d H:i:s')}}</td>
                 </tr>
             {% endfor %}
         </table>
