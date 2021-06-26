@@ -18,20 +18,21 @@ class ZooName
         $this->firstNameGenUrl = $firstNameGenUrl;
     }
 
-    protected function webGet()
+    protected function webGet(string $url)
     {
         $ch = curl_init();
         curl_setopt_array($ch, [
-                CURLOPT_URL => $this->firstNameGenUrl,
+                CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => 'true'
             ]
         );
         return json_decode(curl_exec($ch));
     }
 
+
     protected function GenerateName(): array
     {
-        $getFirstName = $this->webGet();
+        $getFirstName = $this->webGet($this->firstNameGenUrl);
         $firstnameSplit = explode(' ', $getFirstName->name);
 
         $lastNameGen = new Alliteration();

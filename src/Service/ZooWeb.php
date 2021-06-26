@@ -11,10 +11,12 @@ class ZooWeb
 {
     private EntityManagerInterface $em;
     public static string $defaultName = 'zoobot:update';
+    private $wanAPItokenArtUrl;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, $wanAPItokenArtUrl)
     {
         $this->em = $em;
+        $this->wanAPItokenArtUrl = $wanAPItokenArtUrl;
     }
 
     public function RenderNFT(): array
@@ -79,10 +81,12 @@ class ZooWeb
             $seller = $market->getSeller();
 
             $add = array(
-                'nft' => $nft->getName() . '[' . $nft->getNftId() . ']',
+                'nft' => $nft->getName(),
+                'nftimg' => $nft->getImgUrl(),
+                'nftId' => $nft->getNftId(),
                 'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
-                'price' => $market->getPrice() + 0,
-                'currency' => $market->getCurrency(),
+                'price' => $market->getPrice(),
+                'currency' => strtolower($this->wanAPItokenArtUrl . $market->getCurrency() . '.png'),
                 'timestamp' => $market->getTimestamp(),
                 'chainId' => $market->getChainId()
             );

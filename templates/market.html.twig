@@ -2,20 +2,21 @@
 
 {% block body %}
     <div class="main">
+        <h1><a href="https://www.zookeeper.finance/market" target="_blank">Visit&nbsp;&nbsp;&nbsp;<img src="/img/zoo_logo.svg" width="150px" alt="zookeeper_logo">&nbsp;&nbsp;&nbsp;Market</a></h1>
         <table>
             <tr>
                 <th>Nft</th>
                 <th>Price</th>
-                <th>Currency</th>
+                <th></th>
                 <th>Seller</th>
                 <th>Timestamp</th>
             </tr>
             {% for m in MarketCollection %}
                 <tr class="altcolor">
-                    <td>{{m.nft}}</td>
+                    <td><img src={{ m.nftimg }} style="width:40px;height:40px;" alt="nft"/>{{m.nft}}</td>
                     <td>{{m.price}}</td>
-                    <td>{{m.currency}}</td>
-                    <td>{{m.seller}}</td>
+                    <td><img align="center" style="max-width: 35px; max-height: 300px" src={{m.currency}}/></td>
+                    <td style="padding: 0px 50px 0px 50px;">{{m.seller}}</td>
                     <td>{{m.timestamp | date('Y-m-d H:i:s')}}</td>
                 </tr>
             {% endfor %}

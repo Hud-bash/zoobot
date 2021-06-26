@@ -18,18 +18,6 @@ class ZooController extends AbstractController {
     }
 
     /**
-     * @Route("/test", name="test")
-     */
-    public function Testing()
-    {
-        $this->zooName->UpdateNullNames();
-//        return $this->render("market.html.twig", array (
-//                'market' => $market,
-//            )
-//        );
-    }
-
-    /**
      * @Route("/market", name="market")
      */
     public function Market()
