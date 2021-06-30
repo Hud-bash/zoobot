@@ -1,7 +1,7 @@
 <?php
 namespace App\Command;
 
-use App\Service\WanAPI;
+use App\Service\ZooBotAPI;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,9 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ZooKeeperJSONCommand extends Command
 {
     public static $defaultName = 'zoobot:getjson';
-    private WanAPI $zapi;
+    private ZooBotAPI $zapi;
 
-    public function __construct(WanAPI $zapi)
+    public function __construct(ZooBotAPI $zapi)
     {
         $this->zapi = $zapi;
         parent::__construct();

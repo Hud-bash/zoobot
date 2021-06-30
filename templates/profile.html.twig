@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="main">
+        <table>
+            {% for p in Profile %}
+                <tr class="altcolor">
+                    <td>{{ p.wallet }}</td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.animal }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

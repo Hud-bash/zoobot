@@ -1,7 +1,6 @@
 <?php
 namespace App\Command;
 
-use App\Service\WanAPI;
 use App\Service\ZooBotSQL;
 use App\Service\ZooName;
 use Symfony\Component\Console\Command\Command;
@@ -12,14 +11,10 @@ class TestCommand extends Command {
 
     public static $defaultName = 'zoobot:test';
     private ZooName $zooName;
-    private ZooBotSQL $zooBotSQL;
-    private WanAPI $wanAPI;
 
-    public function __construct(ZooName $zooName,ZooBotSQL $zooBotSQL, WanAPI $wanAPI)
+    public function __construct(ZooName $zooName)
     {
         $this->zooName = $zooName;
-        $this->zooBotSQL = $zooBotSQL;
-        $this->wanAPI = $wanAPI;
 
         parent::__construct();
     }
@@ -33,7 +28,6 @@ class TestCommand extends Command {
     {
         $output->writeln('');
         $output->writeln('--Running Test--');
-        $output->writeln($this->wanAPI->GetTokenId('0x6e11655d6aB3781C6613db8CB1Bc3deE9a7e111F'));
         return Command::SUCCESS;
     }
 }

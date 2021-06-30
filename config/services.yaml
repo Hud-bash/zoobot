@@ -13,7 +13,7 @@ services:
         bind:
             $firstNameGenUrl: 'https://api.namefake.com/'
             $wanAPItokenUrl: 'https://wanscan.org/tokenBalance?addr='
-            $wanAPItokenArtUrl: 'https://token-icons.vercel.app/tokens/'
+            $waspTokenImgUrl: 'https://token-icons.vercel.app/tokens/'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

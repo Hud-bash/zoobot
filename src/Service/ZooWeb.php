@@ -3,20 +3,18 @@
 
 namespace App\Service;
 
-
-use App\Entity\MarketHistory;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ZooWeb
 {
     private EntityManagerInterface $em;
+    private $waspTokenImgUrl;
     public static string $defaultName = 'zoobot:update';
-    private $wanAPItokenArtUrl;
 
-    public function __construct(EntityManagerInterface $em, $wanAPItokenArtUrl)
+    public function __construct(EntityManagerInterface $em, $waspTokenImgUrl)
     {
         $this->em = $em;
-        $this->wanAPItokenArtUrl = $wanAPItokenArtUrl;
+        $this->waspTokenImgUrl = $waspTokenImgUrl;
     }
 
     public function RenderNFT(): array
@@ -85,8 +83,9 @@ class ZooWeb
                 'nftimg' => $nft->getImgUrl(),
                 'nftId' => $nft->getNftId(),
                 'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
+                'wallet_id' => $seller->getWalletId(),
                 'price' => $market->getPrice(),
-                'currency' => strtolower($this->wanAPItokenArtUrl . $market->getCurrency() . '.png'),
+                'currency' => strtolower($this->waspTokenImgUrl . $market->getCurrency() . '.png'),
                 'timestamp' => $market->getTimestamp(),
                 'chainId' => $market->getChainId()
             );
@@ -124,6 +123,19 @@ class ZooWeb
             'topbuyer' => $this->em->getRepository('App:MarketHistory')->topBuyer(10)
         );
 
+    }
+
+    public function RenderProfile(string $address): array
+    {
+        $user = $this->em->getRepository('App:Wallet')->findOneBy(['wallet_id' => $address]);
+
+        $profile[] = array(
+            'wallet' => $user->getWalletId(),
+            'name' => $user->getName(),
+            'animal' => $user->getAnimal()
+        );
+
+        return $profile;
     }
 
     private function setCategory(int $i): String

@@ -9,16 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ZooController extends AbstractController {
     private ZooWeb $zooWeb;
-    private ZooName $zooName;
 
-    public function __construct(ZooWeb $zooWeb, ZooName $zooName)
+    public function __construct(ZooWeb $zooWeb)
     {
-        $this->zooName = $zooName;
         $this->zooWeb = $zooWeb;
     }
 
     /**
-     * @Route("/market", name="market")
+     * @Route("/market1", name="market")
      */
     public function Market()
     {
@@ -31,7 +29,7 @@ class ZooController extends AbstractController {
     }
 
     /**
-     * @Route("/market-history", name="market-history")
+     * @Route("/market-history1", name="market-history")
      */
     public function MarketHistory()
     {
@@ -44,7 +42,7 @@ class ZooController extends AbstractController {
     }
 
     /**
-     * @Route("/chest-history", name="chest-history")
+     * @Route("/chest-history1", name="chest-history")
      */
     public function ChestHistory(): Response
     {
@@ -57,7 +55,7 @@ class ZooController extends AbstractController {
     }
 
     /**
-     * @Route("/nft", name="nft")
+     * @Route("/nft1", name="nft")
      */
     public function Nft(): Response
     {
@@ -68,4 +66,18 @@ class ZooController extends AbstractController {
             )
         );
     }
+
+    /**
+     * @Route("/me1", name="profile")
+     */
+    public function Profile(string $wallet): Response
+    {
+        $Profile = $this->zooWeb->RenderProfile($wallet);
+
+        return $this->render("profile.html.twig", array (
+                'Profile' => $Profile,
+            )
+        );
+    }
+
 }

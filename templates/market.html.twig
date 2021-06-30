@@ -16,7 +16,7 @@
                     <td><img src={{ m.nftimg }} style="width:40px;height:40px;" alt="nft"/>{{m.nft}}</td>
                     <td>{{m.price}}</td>
                     <td><img align="center" style="max-width: 35px; max-height: 300px" src={{m.currency}}/></td>
-                    <td style="padding: 0px 50px 0px 50px;">{{m.seller}}</td>
+                    <td style="padding: 0px 50px 0px 50px;"><a href="/me/{{m.wallet_id}}" target="_blank">{{m.seller}}</a></td>
                     <td>{{m.timestamp | date('Y-m-d H:i:s')}}</td>
                 </tr>
             {% endfor %}
