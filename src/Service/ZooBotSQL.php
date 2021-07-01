@@ -93,13 +93,19 @@ class ZooBotSQL {
                 //Only update if the order ID has changed.  Otherwise it is still the same listing, so ignore.
                 if($row->orderId != $marketEntry->getChainId())
                 {
+                    echo('Market() -> Else -> Checking if Order ID has changed');
+
+                    $owningNFT = $marketEntry->getNft();
+
                     $marketEntry->setPrice($row->price);
                     $marketEntry->setCurrency($row->token);
                     $marketEntry->setExpiration($row->expiration);
                     $marketEntry->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
                     $marketEntry->setChainId($row->orderId);
 
-                    $this->em->persist($marketEntry);
+                    $owningNFT->setInMarket($marketEntry);
+
+                    $this->em->persist($owningNFT);
                 }
             }
         }

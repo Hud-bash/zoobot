@@ -1,4 +1,5 @@
 import React, {createContext} from 'react';
+import axios from "axios";
 
 export const NftContext = createContext();
 
@@ -6,16 +7,9 @@ class NftContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            nfts: [{
-                isLocked: 'true',
-                url: 'stuff.jpg',
-                id: '155',
-                name: 'Fruity fluffy fluff stuff',
-                category: 'Magic',
-                item: '3 Stars',
-                level: 'Level 5'
-            }],
+            nfts: [],
         };
+        this.readNft();
     }
 
     //create
@@ -25,7 +19,14 @@ class NftContextProvider extends React.Component {
 
     //read
     readNft() {
-
+        axios.get('/api/nft')
+            .then(response => {
+                this.setState({
+                    nfts: response.data,
+                });
+            }).catch(error => {
+            console.error(error);
+        })
     }
     //update
     updateNft() {

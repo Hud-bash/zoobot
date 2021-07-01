@@ -138,6 +138,23 @@ class ZooWeb
         return $profile;
     }
 
+    public function RenderWallet(): array
+    {
+        $inWallet = $this->em->getRepository('App:Wallet')->findAll();
+        $outWallet[] = array();
+
+        foreach ($inWallet as $wallet)
+        {
+            $outWallet[] = array(
+                'wallet' => $wallet->getWalletId(),
+                'name' => $wallet->getName(),
+                'animal' => $wallet->getAnimal()
+            );
+        }
+
+        return $outWallet;
+    }
+
     private function setCategory(int $i): String
     {
         switch ($i)

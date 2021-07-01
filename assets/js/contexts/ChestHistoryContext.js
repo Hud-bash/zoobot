@@ -1,4 +1,5 @@
 import React, {createContext} from 'react';
+import axios from "axios";
 
 export const ChestHistoryContext = createContext();
 
@@ -6,14 +7,9 @@ class ChestHistoryContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            chesties: [{
-                nft: 'NFT value',
-                type: 'SilverChest',
-                amount: '13000',
-                owner: 'Bob Schmill',
-                timestamp: '5/5/2020'
-            }],
+            chesties: [],
         };
+        this.readChestHistory();
     }
 
     //create
@@ -23,7 +19,14 @@ class ChestHistoryContextProvider extends React.Component {
 
     //read
     readChestHistory() {
-
+        axios.get('/api/chest-history')
+            .then(response => {
+                this.setState({
+                    chesties: response.data,
+                });
+            }).catch(error => {
+            console.error(error);
+        })
     }
     //update
     updateChestHistory() {

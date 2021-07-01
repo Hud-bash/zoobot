@@ -1,4 +1,5 @@
 import React, {createContext} from 'react';
+import axios from "axios";
 
 export const WalletContext = createContext();
 
@@ -6,12 +7,9 @@ class WalletContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            wallets: [{
-                wallet_id: '0x83y5873285829hf28f2hfhf28',
-                name: 'Bob Schmill',
-                animal: 'Sleepy Lion'
-            }],
+            wallets: [],
         };
+        this.readWallet();
     }
 
     //create
@@ -21,7 +19,14 @@ class WalletContextProvider extends React.Component {
 
     //read
     readWallet() {
-
+        axios.get('/api/wallet')
+            .then(response => {
+                this.setState({
+                    wallets: response.data,
+                });
+            }).catch(error => {
+            console.error(error);
+        })
     }
     //update
     updateWallet() {

@@ -20,6 +20,7 @@ import MarketHistoryContextProvider from "../../contexts/MarketHistoryContext";
 import ChestHistoryContextProvider from "../../contexts/ChestHistoryContext";
 import WalletContextProvider from "../../contexts/WalletContext";
 import HomeContextProvider from "../../contexts/HomeContext";
+import NftContextProvider from "../../contexts/NftContext";
 
 const HomePage = () => (
     <HomeContextProvider>
@@ -46,9 +47,9 @@ const ChestHistoryPage = () => (
 )
 
 const NftPage = () => (
-    <MarketHistoryContextProvider>
+    <NftContextProvider>
         <Nft/>
-    </MarketHistoryContextProvider>
+    </NftContextProvider>
 )
 
 const WalletPage = () => (
@@ -59,24 +60,30 @@ const WalletPage = () => (
 
 const useStyles = makeStyles((theme) => ({
     divider: theme.mixins.toolbar,
+    wrapper: {
+        marginLeft: "220px",
+        marginRight: "20px",
+    },
 }));
 
 const Router = () => {
     const classes = useStyles();
     return (
-            <BrowserRouter>
-                <Navigation />
-                <div className={classes.divider}/>
+        <BrowserRouter>
+            <Navigation />
+            <div className={classes.divider}/>
+            <div className={classes.wrapper}>
                 <Switch>
                     <Route exact path="/" component={HomePage} />
                     <Route exact path="/market" component={MarketPage} />
                     <Route exact path="/market-history" component={MarketHistoryPage} />
                     <Route exact path="/chest-history" component={ChestHistoryPage} />
-                    <Route exact path="/nfts" component={NftPage} />
-                    <Route exact path="/wallets" component={WalletPage} />
+                    <Route exact path="/nft" component={NftPage} />
+                    <Route exact path="/wallet" component={WalletPage} />
                     <Route component={NotFound} />
                 </Switch>
-            </BrowserRouter>
+            </div>
+        </BrowserRouter>
     );
 };
 

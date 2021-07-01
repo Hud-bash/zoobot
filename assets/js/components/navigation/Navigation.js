@@ -1,10 +1,10 @@
 //REACT
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 //MUI
 import {
-    AppBar,
-    Drawer,
+    AppBar, Box,
+    Drawer, Link,
     List,
     ListItem,
     ListItemText,
@@ -31,7 +31,7 @@ const Navigation = () => {
         },
         {
             text: 'ZooKeepers',
-            link: '/wallets',
+            link: '/wallet',
         },
         {
             text: 'Chesties!',
@@ -54,23 +54,38 @@ const Navigation = () => {
         },
         drawerPaper: {
             width: drawerWidth,
+            backgroundColor: "white",
         },
         drawerContainer: {
             overflow: 'auto',
         },
-        content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
-        },
         link: {
-            textDecoration: "none",
+            color: "black",
+            textDecoration: 'none',
+            "&:hover": {
+                textDecoration: 'none',
+                color: "black",
+            },
         },
+        navButton: {
+            textDecoration: 'none',
+            color: "black",
+            '&:hover': {
+            backgroundColor: '#fdad48',
+            color: "black",
+            },
+        },
+        active: {
+            textDecoration: "none",
+            backgroundColor: '#fdad48',
+            color: "black"
+        }
     }));
 
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} >
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6">ZooHub</Typography>
@@ -87,11 +102,16 @@ const Navigation = () => {
                 <div className={classes.drawerContainer}>
                     <List>
                         {drawerItems.map(prop => (
-                            <Link className={classes.link} to={prop.link} key={prop.text}>
-                                <ListItem>
-                                    <ListItemText>{prop.text}</ListItemText>
-                                </ListItem>
-                            </Link>
+                            <ListItem
+                                button
+                                className={classes.navButton}
+                                activeClassName={classes.active}
+                                component={NavLink}
+                                to={prop.link}
+                                key={prop.text}
+                            >
+                                <ListItemText>{prop.text}</ListItemText>
+                            </ListItem>
                         ))}
                     </List>
                 </div>

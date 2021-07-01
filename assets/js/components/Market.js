@@ -1,9 +1,17 @@
 import React, {Fragment, useContext} from 'react';
 import {MarketContext} from "../contexts/MarketContext";
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import {makeStyles, Table, TableBody, TableCell, TableHead, TableRow, useTheme} from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+    img: {
+        width: 42,
+    },
+}));
+
 
 function Market() {
     const context = useContext(MarketContext);
+    const classes = useStyles();
     return (
             <Fragment>
                 <Table>
@@ -11,7 +19,7 @@ function Market() {
                         <TableRow>
                             <TableCell>Nft</TableCell>
                             <TableCell>Price</TableCell>
-                            <TableCell>""</TableCell>
+                            <TableCell></TableCell>
                             <TableCell>Seller</TableCell>
                             <TableCell>Timestamp</TableCell>
                         </TableRow>
@@ -21,7 +29,7 @@ function Market() {
                             <TableRow>
                                 <TableCell>{listing.nft}</TableCell>
                                 <TableCell>{listing.price}</TableCell>
-                                <TableCell>{listing.currency}</TableCell>
+                                <TableCell align='left'><img className={classes.img} src = {listing.currency} /></TableCell>
                                 <TableCell>{listing.seller}</TableCell>
                                 <TableCell>{listing.timestamp}</TableCell>
                             </TableRow>

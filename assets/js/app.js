@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
 import Router from "./components/navigation/Router";
+import ZooKeeperTheme from "./components/themes/ZooKeeperTheme";
 
 class App extends Component {
     render() {
@@ -8,4 +9,8 @@ class App extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <ZooKeeperTheme>
+        <App />
+    </ZooKeeperTheme>
+    , document.getElementById('root'));

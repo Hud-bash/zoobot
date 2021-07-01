@@ -1,4 +1,5 @@
 import React, {createContext} from 'react';
+import axios from "axios";
 
 export const MarketContext = createContext();
 
@@ -6,14 +7,9 @@ class MarketContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listings: [{
-                nft: 'NFT value',
-                price: '5000',
-                currency: 'ZOO',
-                seller: 'Bob Schmill',
-                timestamp: '5/5/2020'
-            }],
+            listings: [],
         };
+        this.readMarket();
     }
 
     //create
@@ -23,7 +19,14 @@ class MarketContextProvider extends React.Component {
 
     //read
     readMarket() {
-
+        axios.get('/api/market')
+            .then(response => {
+                this.setState({
+                    listings: response.data,
+                });
+            }).catch(error => {
+                console.error(error);
+        })
     }
     //update
     updateMarket() {
