@@ -41,7 +41,7 @@ class WebApiController extends AbstractController
         return $this->json($this->zooWeb->RenderNFT());
     }
 
-    #[Route('/wallet', name: 'api-nft')]
+    #[Route('/wallet', name: 'api-wallet')]
     public function ApiWallet(): JsonResponse
     {
         return $this->json($this->zooWeb->RenderWallet());

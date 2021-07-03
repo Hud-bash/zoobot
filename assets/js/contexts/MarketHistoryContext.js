@@ -22,7 +22,7 @@ class MarketHistoryContextProvider extends React.Component {
         axios.get('/api/market-history')
             .then(response => {
                 this.setState({
-                    sales: response.data,
+                    sales: response.data.history,
                 });
             }).catch(error => {
             console.error(error);

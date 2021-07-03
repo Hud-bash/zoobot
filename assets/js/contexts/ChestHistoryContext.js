@@ -22,7 +22,7 @@ class ChestHistoryContextProvider extends React.Component {
         axios.get('/api/chest-history')
             .then(response => {
                 this.setState({
-                    chesties: response.data,
+                    chesties: response.data.history,
                 });
             }).catch(error => {
             console.error(error);

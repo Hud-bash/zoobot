@@ -1,33 +1,40 @@
 import React, {useContext} from 'react';
 import {NftContext} from "../contexts/NftContext";
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import {makeStyles, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+    img: {
+        width: 42,
+    },
+}));
 
 function Nft() {
     const context = useContext(NftContext);
+    const classes = useStyles();
 
     return (
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>isLocked</TableCell>
-                    <TableCell>url</TableCell>
-                    <TableCell>id</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>Level</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
                 {context.nfts.map(nft => (
                     <TableRow>
-                        <TableCell>{nft.isLocked}</TableCell>
-                        <TableCell>{nft.url}</TableCell>
+                        <TableCell><img className={classes.img} src = {nft.isLocked} alt='locked' /></TableCell>
+                        <TableCell><img className={classes.img} src = {nft.url} alt='nft' /></TableCell>
                         <TableCell>{nft.id}</TableCell>
                         <TableCell>{nft.name}</TableCell>
-                        <TableCell>{nft.category}</TableCell>
-                        <TableCell>{nft.item}</TableCell>
-                        <TableCell>{nft.level}</TableCell>
+                        <TableCell><img src = {nft.category} alt='category' /></TableCell>
+                        <TableCell><img src = {nft.item} alt='item' /></TableCell>
+                        <TableCell><img src = {nft.level} alt='level' /></TableCell>
                     </TableRow>
                 ))}
             </TableBody>

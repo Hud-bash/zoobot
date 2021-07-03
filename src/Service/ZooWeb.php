@@ -160,17 +160,17 @@ class ZooWeb
         switch ($i)
         {
             case 1:
-                return '<img src="' . '/img/fruits.png"><' . '/img>';
+                return '/img/fruits.png';
             case 2:
-                return '<img src="' . '/img/dishes.png"><' . '/img>';
+                return 'img/dishes.png';
             case 3:
-                return '<img src="' . '/img/sweets.png"><' . '/img>';
+                return '/img/sweets.png';
             case 4:
-                return '<img src="' . '/img/potions.png"><' . '/img>';
+                return '/img/potions.png';
             case 5:
-                return '<img src="' . '/img/magic.png"><' . '/img>';
+                return '/img/magic.png';
             case 6:
-                return '<img src="' . '/img/spices.png"><' . '/img>';
+                return '/img/spices.png';
             default:
                 return strval($i);
         }
@@ -184,7 +184,7 @@ class ZooWeb
             case 0:
                 return '';
             case 1:
-                return '<img src="' . '/img/locked.png" style="width:25px;height:25px;"><' . '/img>';
+                return '/img/locked.png';
             default:
                 return strval($i);
         }
@@ -195,15 +195,15 @@ class ZooWeb
         switch ($i)
         {
             case 1:
-                return '<img src="' . '/img/N.png"><' . '/img>';
+                return '/img/N.png';
             case 2:
-                return '<img src="' . '/img/R.png"><' . '/img>';
+                return '/img/R.png';
             case 3:
-                return '<img src="' . '/img/SR.png"><' . '/img>';
+                return '/img/SR.png';
             case 4:
-                return '<img src="' . '/img/SSR.png"><' . '/img>';
+                return '/img/SSR.png';
             case 5:
-                return '<img src="' . '/img/UR.png"><' . '/img>';
+                return '/img/UR.png';
             default:
                 return strval($i);
         }
@@ -232,16 +232,16 @@ class ZooWeb
         {
             if($nft == "")
             {
-                return '<img src="' . '/img/silverboxfail42x42.png"><' . '/img>';
+                return '/img/silverboxfail42x42.png';
             }
             else
             {
-                return '<img src="' . '/img/silverbox42x42.png"><' . '/img>';
+                return '/img/silverbox42x42.png';
             }
         }
         else
         {
-            return '<img src="' . '/img/goldenbox42x42.png"><' . '/img>';
+            return '/img/goldenbox42x42.png';
         }
     }
 

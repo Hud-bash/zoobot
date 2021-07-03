@@ -1,9 +1,16 @@
 import React, {useContext} from 'react';
 import {ChestHistoryContext} from "../contexts/ChestHistoryContext";
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import {makeStyles, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+    img: {
+        width: 42,
+    },
+}));
 
 function ChestHistory() {
     const context = useContext(ChestHistoryContext);
+    const classes = useStyles();
 
     return (
         <Table>
@@ -20,9 +27,10 @@ function ChestHistory() {
                 {context.chesties.map(chest => (
                     <TableRow>
                         <TableCell>{chest.nft}</TableCell>
-                        <TableCell>{chest.type}</TableCell>
+                        <TableCell><img className={classes.img} src = {chest.type} alt='chest_type' /></TableCell>
                         <TableCell>{chest.amount}</TableCell>
-                        <TableCell>{chest.owner}</TableCell>
+                        <TableCell>{chest.name}</TableCell>
+                        <TableCell>{chest.animal}</TableCell>
                         <TableCell>{chest.timestamp}</TableCell>
                     </TableRow>
                 ))}
