@@ -69,11 +69,8 @@ class ZooBotSQL {
             $nft = $this->MakeNft($row->tokenId);
             $wallet = $this->MakeWallet($row->owner);
 
-            //check for existing entry in database
-            $marketEntry = $this->em->getRepository('App:Market')->findByNftId($row->tokenId);
-
             //if the entry is null, we create a new Market object and insert into the NFT
-            if(!$marketEntry)
+            if(!$nft->getInMarket())
             {
                 $market = new Market();
                 $market->setPrice($row->price);
@@ -87,25 +84,19 @@ class ZooBotSQL {
 
                 $this->em->persist($nft);
             }
-            //Otherwise the market entry exists and requires updating instead of creating a new.
+            //Otherwise the market entry exists and may require updating.
             else
             {
                 //Only update if the order ID has changed.  Otherwise it is still the same listing, so ignore.
-                if($row->orderId != $marketEntry->getChainId())
+                if($row->orderId != $nft->getInMarket()->getChainId())
                 {
-                    echo('Market() -> Else -> Checking if Order ID has changed');
+                    $nft->getInMarket()->setPrice($row->price);
+                    $nft->getInMarket()->setCurrency($row->token);
+                    $nft->getInMarket()->setExpiration($row->expiration);
+                    $nft->getInMarket()->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
+                    $nft->getInMarket()->setChainId($row->orderId);
 
-                    $owningNFT = $marketEntry->getNft();
-
-                    $marketEntry->setPrice($row->price);
-                    $marketEntry->setCurrency($row->token);
-                    $marketEntry->setExpiration($row->expiration);
-                    $marketEntry->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
-                    $marketEntry->setChainId($row->orderId);
-
-                    $owningNFT->setInMarket($marketEntry);
-
-                    $this->em->persist($owningNFT);
+                    $this->em->persist($nft);
                 }
             }
         }

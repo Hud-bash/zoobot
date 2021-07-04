@@ -29,7 +29,8 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\ZooBotAPI:
         arguments:
-            $baseUrl: 'https://rpc.zookeeper.finance/api/v1/'
+            $baseZooKeeperUrl: 'https://rpc.zookeeper.finance/api/v1/'
+            $baseWanSwapUrl: 'https://www.wanswap.finance/'
 
     App\Service\ZooBotSQL:
         arguments: ["", "@doctrine.orm.default_entity_manager"]

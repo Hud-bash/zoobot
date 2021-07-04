@@ -17,9 +17,10 @@ function ChestHistory() {
             <TableHead>
                 <TableRow>
                     <TableCell>Nft</TableCell>
-                    <TableCell>""</TableCell>
+                    <TableCell></TableCell>
                     <TableCell>Zoo</TableCell>
                     <TableCell>Owner</TableCell>
+                    <TableCell></TableCell>
                     <TableCell>Timestamp</TableCell>
                 </TableRow>
             </TableHead>

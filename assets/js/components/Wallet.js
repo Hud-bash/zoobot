@@ -10,14 +10,14 @@ function Wallet() {
             <TableHead>
                 <TableRow>
                     <TableCell>Wallet</TableCell>
-                    <TableCell>First Name</TableCell>
-                    <TableCell>Last Name</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell></TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
                 {context.wallets.map(wallet => (
                     <TableRow>
-                        <TableCell>{wallet.wallet_id}</TableCell>
+                        <TableCell>{wallet.wallet}</TableCell>
                         <TableCell>{wallet.name}</TableCell>
                         <TableCell>{wallet.animal}</TableCell>
                     </TableRow>
