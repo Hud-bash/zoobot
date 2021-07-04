@@ -30,8 +30,8 @@ class ZooWeb
             "name" => $nft->getName(),
             "category" => $this->setCategory($nft->getCategory()),
             "item" => $this->setClass($nft->getItem()),
-            "level" => $this->setLevel($nft->getLevel()),
-            "isLocked" => $this->setLock($nft->getIsLocked())
+            "level" => $nft->getLevel(),
+            "isLocked" => $nft->getIsLocked()
         );
 
         $outNft[] = $add;
@@ -85,7 +85,7 @@ class ZooWeb
                 'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
                 'wallet_id' => $seller->getWalletId(),
                 'price' => $market->getPrice(),
-                'currency' => strtolower($this->waspTokenImgUrl . $market->getCurrency() . '.png'),
+                'currency' => $market->getCurrency(),
                 'timestamp' => $market->getTimestamp(),
                 'chainId' => $market->getChainId()
             );
@@ -104,13 +104,14 @@ class ZooWeb
             $nft = $market->getNft();
             $buyer = $market->getBuyer();
             $seller = $market->getSeller();
+            $currency = $this->em->getRepository('App:Token')->findOneBy(['address'=>$market->getCurrency()]);
 
             $add = array(
                 'nft' => $nft->getName() . '[' . $nft->getNftId() . ']',
                 'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
                 'buyer' => $buyer->getName() . ' ' . $buyer->getAnimal(),
                 'price' => $market->getPrice(),
-                'currency' => $market->getCurrency(),
+                'currency' => $currency->getLogo(),
                 'timestamp' => $market->getTimestamp(),
                 'chainId' => $market->getChainId(),
                 'txHash' => $market->getTxHash()
@@ -177,19 +178,6 @@ class ZooWeb
 
     }
 
-    private function setLock(int $i): String
-    {
-        switch ($i)
-        {
-            case 0:
-                return '';
-            case 1:
-                return '/img/locked.png';
-            default:
-                return strval($i);
-        }
-    }
-
     private function setClass(int $i): String
     {
         switch ($i)
@@ -204,23 +192,6 @@ class ZooWeb
                 return '/img/SSR.png';
             case 5:
                 return '/img/UR.png';
-            default:
-                return strval($i);
-        }
-    }
-
-    private function setLevel(int $i): String
-    {
-        switch ($i) {
-            case ($i <= 3):
-                $html = '';
-                for($x = 1; $x <= $i; $x++)
-                {
-                    $html = $html . '<img src="' . '/img/star18x18.png"><' . '/img>';
-                }
-                return $html;
-            case 4:
-                return '<img src="' . '/img/max.png"><' . '/img>';
             default:
                 return strval($i);
         }

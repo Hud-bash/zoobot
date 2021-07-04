@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Token;
 use App\Entity\Wallet;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,22 +21,16 @@ class ZooBotSQL {
         $this->em = $em;
     }
 
-    public function UpdateNft(): string
+    public function UpdateToken(): string
     {
-        $updates = $this->zapi->nftJson;
-        $table = $this->em->getRepository("App:Nft");
-               
-        foreach($updates as $row)
-        {
-            $exists = $table->findOneBy(['nft_id' => $row->tokenId]);
+        $jsonObjects = $this->zapi->tokenJson;
 
-            if (!$exists)
-            {
-                $this->MakeNft($row->tokenId);
-            }
+        foreach ($jsonObjects->tokens as $object)
+        {
+            $this->MakeToken($object->address);
         }
 
-        return 'NFTs tractorbeamed.';
+        return 'Token table updates YEEEEET.';
     }
 
     public function UpdateNftLock(): string
@@ -54,6 +49,24 @@ class ZooBotSQL {
         return 'Locked NFTs analyzed --bzzzrrrrrrz--';
     }
 
+    public function UpdateNft(): string
+    {
+        $updates = $this->zapi->nftJson;
+        $table = $this->em->getRepository("App:Nft");
+
+        foreach($updates as $row)
+        {
+            $exists = $table->findOneBy(['nft_id' => $row->tokenId]);
+
+            if (!$exists)
+            {
+                $this->MakeNft($row->tokenId);
+            }
+        }
+
+        return 'NFTs tractorbeamed.';
+    }
+
     public function UpdateMarket(): string
     {
         $updates = $this->zapi->marketJson;
@@ -65,16 +78,17 @@ class ZooBotSQL {
             //List to be used at the end to clear market table of items no longer in market
             $currentIds[] = $row->tokenId;
 
-            //Create objects for the NFT & Wallet.
+            //Create objects for the NFT, Currency Token & Wallet.
             $nft = $this->MakeNft($row->tokenId);
             $wallet = $this->MakeWallet($row->owner);
+            $currency = $this->MakeToken($row->token);
 
             //if the entry is null, we create a new Market object and insert into the NFT
             if(!$nft->getInMarket())
             {
                 $market = new Market();
-                $market->setPrice($row->price);
-                $market->setCurrency($row->token);
+                $market->setPrice(intval($row->price) / pow(10, $currency->getDecimalLength()));
+                $market->setCurrency($currency->getLogo());
                 $market->setExpiration($row->expiration);
                 $market->setSeller($wallet);
                 $market->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
@@ -90,8 +104,8 @@ class ZooBotSQL {
                 //Only update if the order ID has changed.  Otherwise it is still the same listing, so ignore.
                 if($row->orderId != $nft->getInMarket()->getChainId())
                 {
-                    $nft->getInMarket()->setPrice($row->price);
-                    $nft->getInMarket()->setCurrency($row->token);
+                    $nft->getInMarket()->setPrice(intval($row->price) / pow(10, $currency->getDecimalLength()));
+                    $nft->getInMarket()->setCurrency($currency->getLogo());
                     $nft->getInMarket()->setExpiration($row->expiration);
                     $nft->getInMarket()->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
                     $nft->getInMarket()->setChainId($row->orderId);
@@ -100,6 +114,7 @@ class ZooBotSQL {
                 }
             }
         }
+        //deletes rows from table that no longer exist in the market feed.
         $table->CleanMarket($currentIds);
 
         $this->em->flush();
@@ -126,10 +141,11 @@ class ZooBotSQL {
                 $date = $timestamp[0];
                 $time = substr($timestamp[1], 0, -5);
                 $correctDate = date('Y-m-d H:i:s', strtotime($date . ' ' . $time));
-                
+                $currency = $this->em->getRepository('App:Token')->findOneBySymbol($row->symbol);
+
                 $marketHistory = new MarketHistory();
                 $marketHistory->setPrice($row->price);
-                $marketHistory->setCurrency($row->symbol);
+                $marketHistory->setCurrency($currency->getAddress());
                 $marketHistory->setBuyer($this->MakeWallet($row->buyer));
                 $marketHistory->setSeller($this->MakeWallet($row->seller));
                 $marketHistory->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s', $correctDate));
@@ -212,29 +228,31 @@ class ZooBotSQL {
 
     public function MakeNft(int $id): Nft
     {
-        $rpcUpdates = $this->zapi->nftJson;
+        $jsonUpdate = $this->zapi->nftJson;
         $nft = $this->em->getRepository('App:Nft')->findOneBy(['nft_id' => $id]);
-
+        //Check if nft exists
         if(!$nft)
         {
-            foreach ($rpcUpdates as $row)
+            //if it does not, we loop through ZooKeeper rpc results to find the NFT details
+            foreach ($jsonUpdate as $item)
             {
-                if($row->tokenId == $id)
+                //When found, we create a new NFT with the information.
+                if($item->tokenId == $id)
                 {
                     $nft = new Nft();
-                    $nft->setNftId($row->tokenId);
-                    $nft->setName($row->name);
-                    $nft->setCategory($row->category);
-                    $nft->setItem($row->item);
-                    $nft->setLevel($row->level);
-                    $nft->setBoost($row->boosting);
-                    $nft->setReduction($row->reduce);
-                    $nft->setRandom($row->random);
-                    $nft->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->timestamp)));
-                    $nft->setChainId($row->_id);
-                    $nft->setBlock($row->blockNumber);
-                    $nft->setTxHash($row->txHash);
-                    $nft->setImgURL($row->image);
+                    $nft->setNftId($item->tokenId);
+                    $nft->setName($item->name);
+                    $nft->setCategory($item->category);
+                    $nft->setItem($item->item);
+                    $nft->setLevel($item->level);
+                    $nft->setBoost($item->boosting);
+                    $nft->setReduction($item->reduce);
+                    $nft->setRandom($item->random);
+                    $nft->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $item->timestamp)));
+                    $nft->setChainId($item->_id);
+                    $nft->setBlock($item->blockNumber);
+                    $nft->setTxHash($item->txHash);
+                    $nft->setImgURL($item->image);
 
                     $this->em->persist($nft);
                     $this->em->flush();
@@ -243,5 +261,31 @@ class ZooBotSQL {
         }
 
         return $this->em->getRepository('App:Nft')->findOneBy(['nft_id' => $id]);
+    }
+
+    public function MakeToken(string $id): ?object
+    {
+        $jsonUpdate = $this->zapi->tokenJson;
+        $exists = $this->em->getRepository('App:Token')->findOneBy(['address' => $id]);
+
+        if(!$exists)
+            {
+                foreach ($jsonUpdate->tokens as $item)
+                {
+                    if ($item->address == $id and $item->chainId == '888')
+                    {
+                        $token = new Token();
+                        $token->setAddress($item->address);
+                        $token->setName($item->name);
+                        $token->setDecimalLength($item->decimals);
+                        $token->setSymbol($item->symbol);
+                        $token->setLogo($item->logoURI);
+
+                        $this->em->persist($token);
+                        $this->em->flush();
+                    }
+                }
+            }
+        return $this->em->getRepository('App:Token')->findOneBy(['address' => $id]);
     }
 }

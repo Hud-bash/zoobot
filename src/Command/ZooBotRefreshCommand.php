@@ -9,7 +9,7 @@ use App\Service\ZooBotSQL;
 
 class ZooBotRefreshCommand extends Command {
 
-    public static $defaultName = 'zoobot:update';
+    public static $defaultName = 'zoo:update';
     private ZooBotSQL $zooBotSQL;
     private ZooName $zooName;
 
@@ -35,7 +35,9 @@ class ZooBotRefreshCommand extends Command {
         $output->writeln($this->zooBotSQL->UpdateMarket());
         $output->writeln($this->zooBotSQL->UpdateMarketHistory());
         $output->writeln($this->zooBotSQL->UpdateChestHistory());
+        $output->writeln($this->zooBotSQL->UpdateToken());
         $output->writeln($this->zooName->UpdateNullNames());
+
         return Command::SUCCESS;
     }
 }

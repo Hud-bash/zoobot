@@ -28,13 +28,13 @@ function Nft() {
             <TableBody>
                 {context.nfts.map(nft => (
                     <TableRow>
-                        <TableCell><img className={classes.img} src = {nft.isLocked} alt='locked' /></TableCell>
+                        <TableCell>{nft.isLocked}</TableCell>
                         <TableCell><img className={classes.img} src = {nft.url} alt='nft' /></TableCell>
                         <TableCell>{nft.id}</TableCell>
                         <TableCell>{nft.name}</TableCell>
                         <TableCell><img src = {nft.category} alt='category' /></TableCell>
                         <TableCell><img src = {nft.item} alt='item' /></TableCell>
-                        <TableCell><img src = {nft.level} alt='level' /></TableCell>
+                        <TableCell>{nft.level}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>

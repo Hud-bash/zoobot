@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ZooKeeperJSONCommand extends Command
 {
-    public static $defaultName = 'zoobot:getjson';
+    public static $defaultName = 'zoo:getjson';
     private ZooBotAPI $zapi;
 
     public function __construct(ZooBotAPI $zapi)
@@ -29,6 +29,7 @@ class ZooKeeperJSONCommand extends Command
         $this->zapi->GetMarketHistory();
         $this->zapi->GetMarket();
         $this->zapi->GetNftLock();
+        $this->zapi->GetToken();
         return Command::SUCCESS;
     }
 }

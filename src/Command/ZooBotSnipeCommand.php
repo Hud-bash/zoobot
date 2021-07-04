@@ -8,7 +8,7 @@ use App\Service\ZooBotSQL;
 
 class ZooBotSnipeCommand extends Command {
 
-    public static $defaultName = 'zoobot:snipe';
+    public static $defaultName = 'zoo:snipe';
     private ZooBotSQL $zooBotSQL;
 
     public function __construct(ZooBotSQL $zooBotSQL)
