@@ -16,13 +16,13 @@ function Nft() {
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
+                    <TableCell/>
+                    <TableCell/>
+                    <TableCell/>
+                    <TableCell/>
+                    <TableCell/>
+                    <TableCell/>
+                    <TableCell/>
                 </TableRow>
             </TableHead>
             <TableBody>

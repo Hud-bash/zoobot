@@ -11,7 +11,7 @@ function Wallet() {
                 <TableRow>
                     <TableCell>Wallet</TableCell>
                     <TableCell>Name</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell/>
                 </TableRow>
             </TableHead>
             <TableBody>

@@ -88,7 +88,7 @@ const Navigation = () => {
         <div className={classes.root} >
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-                    <Typography variant="h6">ZooHub</Typography>
+                    <Typography variant="h5">ZooStation</Typography>
                 </Toolbar>
             </AppBar>
             <Drawer

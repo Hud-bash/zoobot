@@ -12,12 +12,6 @@ class Wallet
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
     public $wallet_id;
@@ -34,11 +28,6 @@ class Wallet
 
     public function __construct()
     {
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getWalletId(): ?string
@@ -75,5 +64,15 @@ class Wallet
         $this->animal = $animal;
 
         return $this;
+    }
+
+    public function toArray()
+    {
+        return
+        [
+            'wallet'=>$this->wallet_id,
+            'name'=>$this->name,
+            'animal'=>$this->animal,
+        ];
     }
 }

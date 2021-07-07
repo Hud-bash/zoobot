@@ -351,4 +351,20 @@ class Nft
 
         return $this;
     }
+
+    public function toArray()
+    {
+        return
+        [
+            'nft_id'=> $this->id,
+            'name'=> $this->name,
+            'category'=> $this->category,
+            'item'=> $this->item,
+            'level'=> $this->level,
+            'boost'=> $this->boost,
+            'reduction'=> $this->reduction,
+            'isLocked'=> $this->isLocked,
+            'img'=> $this->imgURL
+        ];
+    }
 }

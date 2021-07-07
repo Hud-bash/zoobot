@@ -12,16 +12,15 @@ class Market
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\OneToOne(targetEntity=Nft::class, inversedBy="inMarket", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $nft;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $chain_id;
 
     /**
      * @ORM\Column(type="float")
@@ -44,19 +43,10 @@ class Market
     private $timestamp;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $chain_id;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="markets", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="wallet_id")
      */
     private $seller;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getNft(): ?Nft
     {

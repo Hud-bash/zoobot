@@ -18,7 +18,7 @@ function MarketHistory() {
                 <TableRow>
                     <TableCell>Nft</TableCell>
                     <TableCell>Price</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell/>
                     <TableCell>Seller</TableCell>
                     <TableCell>Buyer</TableCell>
                     <TableCell>Timestamp</TableCell>

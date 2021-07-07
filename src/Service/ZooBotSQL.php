@@ -87,7 +87,7 @@ class ZooBotSQL {
             if(!$nft->getInMarket())
             {
                 $market = new Market();
-                $market->setPrice(intval($row->price) / pow(10, $currency->getDecimalLength()));
+                $market->setPrice($row->price / pow(10, $currency->getDecimalLength()));
                 $market->setCurrency($currency->getLogo());
                 $market->setExpiration($row->expiration);
                 $market->setSeller($wallet);
@@ -104,7 +104,7 @@ class ZooBotSQL {
                 //Only update if the order ID has changed.  Otherwise it is still the same listing, so ignore.
                 if($row->orderId != $nft->getInMarket()->getChainId())
                 {
-                    $nft->getInMarket()->setPrice(intval($row->price) / pow(10, $currency->getDecimalLength()));
+                    $nft->getInMarket()->setPrice($row->price / pow(10, $currency->getDecimalLength()));
                     $nft->getInMarket()->setCurrency($currency->getLogo());
                     $nft->getInMarket()->setExpiration($row->expiration);
                     $nft->getInMarket()->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
@@ -245,8 +245,8 @@ class ZooBotSQL {
                     $nft->setCategory($item->category);
                     $nft->setItem($item->item);
                     $nft->setLevel($item->level);
-                    $nft->setBoost($item->boosting);
-                    $nft->setReduction($item->reduce);
+                    $nft->setBoost(($item->boosting / pow(10, 10) - 100) * .01);
+                    $nft->setReduction(($item->reduce / pow(10, 10) - 100) * .01);
                     $nft->setRandom($item->random);
                     $nft->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $item->timestamp)));
                     $nft->setChainId($item->_id);
@@ -287,5 +287,22 @@ class ZooBotSQL {
                 }
             }
         return $this->em->getRepository('App:Token')->findOneBy(['address' => $id]);
+    }
+
+    public function FixBoostPercent(): string
+    {
+        $jsonUpdate = $this->zapi->nftJson;
+
+        foreach ($jsonUpdate as $item)
+        {
+            $nft = $this->em->getRepository('App:Nft')->findOneByNftId($item->tokenId);
+
+            $nft->setBoost(($item->boosting / pow(10, 10) - 100) * .01);
+            $nft->setReduction(($item->reduce / pow(10, 10) - 100) * .01);
+
+            $this->em->persist($nft);
+            $this->em->flush();
+        }
+        return 'Boost/Reduction values calculated.';
     }
 }

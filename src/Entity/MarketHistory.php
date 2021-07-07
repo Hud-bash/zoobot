@@ -55,13 +55,13 @@ class MarketHistory
 
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="sellHistory", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="seller_wallet", nullable=false, referencedColumnName="wallet_id")
      */
     private $seller;
 
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="buyHistory", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="buyer_wallet", nullable=false, referencedColumnName="wallet_id")
      */
     private $buyer;
 

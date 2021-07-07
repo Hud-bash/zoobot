@@ -8,13 +8,10 @@ use Doctrine\ORM\EntityManagerInterface;
 class ZooWeb
 {
     private EntityManagerInterface $em;
-    private $waspTokenImgUrl;
-    public static string $defaultName = 'zoobot:update';
 
-    public function __construct(EntityManagerInterface $em, $waspTokenImgUrl)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->waspTokenImgUrl = $waspTokenImgUrl;
     }
 
     public function RenderNFT(): array
@@ -48,7 +45,7 @@ class ZooWeb
 
         foreach ($inHistory as $chest)
         {
-            $nft = (is_null($chest->getNft()) ? "" : $chest->getNft()->getName());
+            $nft = (is_null($chest->getNft()) ? "" : $chest->getNft()->toArray());
             $wallet = (is_null($chest->getWallet()) ? null : $chest->getWallet());
 
             $add = array(
@@ -75,15 +72,9 @@ class ZooWeb
 
         foreach ($inMarket as $market)
         {
-            $nft = $market->getNft();
-            $seller = $market->getSeller();
-
             $add = array(
-                'nft' => $nft->getName(),
-                'nftimg' => $nft->getImgUrl(),
-                'nftId' => $nft->getNftId(),
-                'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
-                'wallet_id' => $seller->getWalletId(),
+                'nft' => $this->em->getRepository('App:Nft')->findOneByNftId($market->getNft())->toArray(),
+                'seller' => $this->em->getRepository('App:Wallet')->findOneByWalletId($market->getSeller())->toArray(),
                 'price' => $market->getPrice(),
                 'currency' => $market->getCurrency(),
                 'timestamp' => $market->getTimestamp(),
@@ -101,15 +92,15 @@ class ZooWeb
 
         foreach ($inHistory as $market)
         {
-            $nft = $market->getNft();
-            $buyer = $market->getBuyer();
-            $seller = $market->getSeller();
+            $nft = $market->getNft()->toArray();
+            $buyer = $market->getBuyer()->toArray();
+            $seller = $market->getSeller()->toArray();
             $currency = $this->em->getRepository('App:Token')->findOneBy(['address'=>$market->getCurrency()]);
 
             $add = array(
-                'nft' => $nft->getName() . '[' . $nft->getNftId() . ']',
-                'seller' => $seller->getName() . ' ' . $seller->getAnimal(),
-                'buyer' => $buyer->getName() . ' ' . $buyer->getAnimal(),
+                'nft' => $nft,
+                'seller' => $seller,
+                'buyer' => $buyer,
                 'price' => $market->getPrice(),
                 'currency' => $currency->getLogo(),
                 'timestamp' => $market->getTimestamp(),
@@ -128,12 +119,16 @@ class ZooWeb
 
     public function RenderProfile(string $address): array
     {
-        $user = $this->em->getRepository('App:Wallet')->findOneBy(['wallet_id' => $address]);
+        $user = $this->em->getRepository('App:Wallet')->findOneBy(['wallet_id' => $address])->toArray();
+        $chesties = $this->em->getRepository('App:ChestHistory')->findbywallet($address);
+        $market = $this->em->getRepository('App:Market')->findByWalletId($address);
+        $marketHistory = $this->em->getRepository('App:MarketHistory')->findbyWalletId($address);
 
         $profile[] = array(
-            'wallet' => $user->getWalletId(),
-            'name' => $user->getName(),
-            'animal' => $user->getAnimal()
+            'profile' => $user,
+            'chesties' => $chesties,
+            'market' => $market,
+            'marketHistory' => $marketHistory,
         );
 
         return $profile;

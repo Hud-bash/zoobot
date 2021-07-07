@@ -30,7 +30,7 @@ class TestCommand extends Command {
     {
         $output->writeln('');
         $output->writeln('--Running Test--');
-        $output->writeln($this->zooBotSQL->UpdateMarket());
+        $output->writeln($this->zooBotSQL->FixBoostPercent());
         return Command::SUCCESS;
     }
 }

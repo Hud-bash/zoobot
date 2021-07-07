@@ -1,7 +1,6 @@
 //REACT
 import React from 'react';
 import {createMuiTheme, CssBaseline, MuiThemeProvider, responsiveFontSizes} from '@material-ui/core';
-import {green, red} from "@material-ui/core/colors";
 import LanaPixelWoff2 from '../themes/fonts/LanaPixel.woff2';
 
 const lanapixel = {
@@ -13,8 +12,9 @@ const lanapixel = {
 };
 
 const theme = createMuiTheme({
+
     palette: {
-        type: 'dark',
+        type: 'light',
         secondary: {
             main: '#fdad48',
         },
@@ -25,10 +25,21 @@ const theme = createMuiTheme({
     },
     typography: {
         fontFamily: 'LanaPixel, sans-serif',
-        fontSize: 30,
+        fontSize: 20,
         fontWeightRegular: 'normal',
     },
     overrides: {
+        MuiLink: {
+            root: {
+                textDecoration: 'none',
+            },
+            underlineHover: {
+                textDecoration: 'none',
+                "&:hover": {
+                    textDecoration: 'none',
+                },
+            },
+        },
         MuiCssBaseline: {
             '@global': {
                 '@font-face': [lanapixel],

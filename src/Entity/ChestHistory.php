@@ -54,7 +54,7 @@ class ChestHistory
 
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="chestHistory")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, referencedColumnName="wallet_id")
      */
     private $wallet;
 

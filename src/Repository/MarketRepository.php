@@ -45,6 +45,15 @@ class MarketRepository extends ServiceEntityRepository
         return $this->findBy(array(), array($column => 'DESC'));
     }
 
+    public function findByWalletId($wallet)
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.seller = :val')
+            ->setParameter('val', $wallet)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Market[] Returns an array of Market objects
     //  */

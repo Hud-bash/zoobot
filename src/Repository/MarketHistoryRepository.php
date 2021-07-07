@@ -28,7 +28,7 @@ class MarketHistoryRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('m')
             ->select('count(m.seller) as count, w.wallet_id')
-            ->innerJoin('App:Wallet', 'w', 'WITH', 'm.seller = w.id')
+            ->innerJoin('App:Wallet', 'w', 'WITH', 'm.seller = w.wallet_id')
             ->groupBy('w.wallet_id')
             ->orderBy('count', 'DESC')
             ->setMaxResults($x)
@@ -40,12 +40,33 @@ class MarketHistoryRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('m')
             ->select('count(m.buyer) as count, w.wallet_id')
-            ->innerJoin('App:Wallet', 'w', 'WITH', 'm.buyer = w.id')
+            ->innerJoin('App:Wallet', 'w', 'WITH', 'm.buyer = w.wallet_id')
             ->groupBy('w.wallet_id')
             ->orderBy('count', 'DESC')
             ->setMaxResults($x)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findbyWalletId($value)
+    {
+        $buy = $this->createQueryBuilder('m')
+            ->andWhere('m.buyer = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
+
+        $sell = $this->createQueryBuilder('m')
+            ->andWhere('m.seller = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
+
+        return
+            [
+                'sell' => $sell,
+                'buy' => $buy,
+            ];
     }
 
     // /**

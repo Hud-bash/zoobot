@@ -32,7 +32,15 @@ class WalletRepository extends ServiceEntityRepository
             ;
     }
 
-
+    public function findOneByWalletId($value): ?Wallet
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.wallet_id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 
     // /**
     //  * @return Wallet[] Returns an array of Wallet objects

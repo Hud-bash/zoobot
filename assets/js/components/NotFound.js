@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 const NotFound = () => {
     return (
-        <Box textAlign="center">
+        <Box paddingTop='20px' textAlign="center">
             <Typography variant="h1">Page Not Found 404</Typography>
             <Link style={{textDecoration: 'none'}} to="/">
                 <Button color="primary" variant="contained" size="large">Go Back To Home Page</Button>

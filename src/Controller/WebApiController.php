@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api', name: 'api-root')]
+/**
+ * @Route("/api", name="api-root/")
+ */
 class WebApiController extends AbstractController
 {
     private ZooWeb $zooWeb;
@@ -17,33 +19,52 @@ class WebApiController extends AbstractController
         $this->zooWeb = $zooWeb;
     }
 
-    #[Route('/market', name: 'api-market')]
+    /**
+     * @Route("/market", name="api-market")
+     */
     public function ApiMarket(): JsonResponse
     {
         return $this->json($this->zooWeb->RenderMarket());
     }
 
-    #[Route('/market-history', name: 'api-market-history')]
+    /**
+     * @Route("/market-history", name="api-market-history")
+     */
     public function ApiMarketHistory(): JsonResponse
     {
         return $this->json($this->zooWeb->RenderMarketHistory());
     }
 
-    #[Route('/chest-history', name: 'api-chest-history')]
+    /**
+     * @Route("/chest-history", name="api-chest-history")
+     */
     public function ApiChestHistory(): JsonResponse
     {
         return $this->json($this->zooWeb->RenderChestHistory());
     }
 
-    #[Route('/nft', name: 'api-nft')]
+    /**
+     * @Route("/nft", name="api-nft")
+     */
     public function ApiNft(): JsonResponse
     {
         return $this->json($this->zooWeb->RenderNFT());
     }
 
-    #[Route('/wallet', name: 'api-wallet')]
+    /**
+     * @Route("/wallet", name="api-wallet")
+     */
     public function ApiWallet(): JsonResponse
     {
         return $this->json($this->zooWeb->RenderWallet());
     }
+
+    /**
+     * @Route("/profile/{wallet}", name="api-profile")
+     */
+    public function ApiProfile(string $wallet): JsonResponse
+    {
+        return $this->json($this->zooWeb->RenderProfile($wallet));
+    }
+
 }

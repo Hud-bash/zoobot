@@ -30,12 +30,12 @@ class ZooBotRefreshCommand extends Command {
     {
         $output->writeln('');
         $output->writeln('--Running Refresh--');
+        $output->writeln($this->zooBotSQL->UpdateToken());
         $output->writeln($this->zooBotSQL->UpdateNft());
         $output->writeln($this->zooBotSQL->UpdateNftLock());
         $output->writeln($this->zooBotSQL->UpdateMarket());
         $output->writeln($this->zooBotSQL->UpdateMarketHistory());
         $output->writeln($this->zooBotSQL->UpdateChestHistory());
-        $output->writeln($this->zooBotSQL->UpdateToken());
         $output->writeln($this->zooName->UpdateNullNames());
 
         return Command::SUCCESS;

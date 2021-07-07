@@ -8,9 +8,9 @@ const styles = {
 export default class Home extends React.Component {
     render() {
         return <div style={styles.home}>
-            <h1>Home Page</h1>
+            <h1>ZooStation</h1>
 
-            <p>Yay Home</p>
+            <p>Orbital hub of commerce for all zookeepers.</p>
         </div>;
     }
 }
