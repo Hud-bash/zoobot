@@ -7,7 +7,10 @@ class MarketHistoryContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            count: 0,
             sales: [],
+            topbuyers: [],
+            topsellers: [],
         };
         this.readMarketHistory();
     }
@@ -22,7 +25,10 @@ class MarketHistoryContextProvider extends React.Component {
         axios.get('/api/market-history')
             .then(response => {
                 this.setState({
+                    count: response.data.count,
                     sales: response.data.history,
+                    topbuyers: response.data.topbuyer,
+                    topsellers: response.data.topseller,
                 });
             }).catch(error => {
             console.error(error);

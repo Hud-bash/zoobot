@@ -28,11 +28,15 @@ class WebApiController extends AbstractController
     }
 
     /**
-     * @Route("/market-history", name="api-market-history")
+     * @Route("/market-history/{page}-{skip}", name="api-market-history", requirements={"page"="\d+"})
      */
-    public function ApiMarketHistory(): JsonResponse
+    public function ApiMarketHistory($page = 1, $skip = 1): JsonResponse
     {
-        return $this->json($this->zooWeb->RenderMarketHistory());
+        $paginate[] = array(
+            'page' => $page,
+            'skip' => $skip
+            );
+        return $this->json($this->zooWeb->RenderMarketHistory($paginate));
     }
 
     /**

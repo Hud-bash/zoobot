@@ -21,19 +21,8 @@ class ZooWeb
 
         foreach ($inNft as $nft)
         {
-        $add = array(
-            "url" => $nft->getImgUrl(),
-            "id" => $nft->getNftId(),
-            "name" => $nft->getName(),
-            "category" => $this->setCategory($nft->getCategory()),
-            "item" => $this->setClass($nft->getItem()),
-            "level" => $nft->getLevel(),
-            "isLocked" => $nft->getIsLocked()
-        );
-
-        $outNft[] = $add;
+        $outNft[] = $nft->toArray();
         }
-
         return $outNft;
     }
 
@@ -62,7 +51,9 @@ class ZooWeb
             $chests[] = $add;
         };
 
-        return array('history' => $chests, 'topchesties' => $top20);
+        return array(
+            'history' => $chests,
+            'topchesties' => $top20);
     }
 
     public function RenderMarket(): array
@@ -85,9 +76,10 @@ class ZooWeb
         return $markets;
     }
 
-    public function RenderMarketHistory(): array
+    public function RenderMarketHistory($paginate): array
     {
-        $inHistory = $this->em->getRepository('App:MarketHistory')->findAllDescending('timestamp');
+        $inHistory = $this->em->getRepository('App:MarketHistory')->findByPaginate($paginate);
+        $recordCount = $this->em->getRepository('App:MarketHistory')->getCount();
         $markets = array();
 
         foreach ($inHistory as $market)
@@ -110,9 +102,10 @@ class ZooWeb
             $markets[] = $add;
         }
         return array(
+            'count' => $recordCount,
             'history' => $markets,
-            'topseller' => $this->em->getRepository('App:MarketHistory')->topSeller(10),
-            'topbuyer' => $this->em->getRepository('App:MarketHistory')->topBuyer(10)
+            'topsellers' => $this->em->getRepository('App:MarketHistory')->topSeller(10),
+            'topbuyers' => $this->em->getRepository('App:MarketHistory')->topBuyer(10)
         );
 
     }
@@ -149,47 +142,6 @@ class ZooWeb
         }
 
         return $outWallet;
-    }
-
-    private function setCategory(int $i): String
-    {
-        switch ($i)
-        {
-            case 1:
-                return '/img/fruits.png';
-            case 2:
-                return 'img/dishes.png';
-            case 3:
-                return '/img/sweets.png';
-            case 4:
-                return '/img/potions.png';
-            case 5:
-                return '/img/magic.png';
-            case 6:
-                return '/img/spices.png';
-            default:
-                return strval($i);
-        }
-
-    }
-
-    private function setClass(int $i): String
-    {
-        switch ($i)
-        {
-            case 1:
-                return '/img/N.png';
-            case 2:
-                return '/img/R.png';
-            case 3:
-                return '/img/SR.png';
-            case 4:
-                return '/img/SSR.png';
-            case 5:
-                return '/img/UR.png';
-            default:
-                return strval($i);
-        }
     }
 
     private function setChestType(string $type, $nft): String

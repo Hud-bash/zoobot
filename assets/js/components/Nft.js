@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import {NftContext} from "../contexts/NftContext";
 import {makeStyles, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import NftTableCell from "./layouts/NftTableCell";
 
 const useStyles = makeStyles((theme) => ({
     img: {
@@ -14,27 +15,10 @@ function Nft() {
 
     return (
         <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell/>
-                    <TableCell/>
-                    <TableCell/>
-                    <TableCell/>
-                    <TableCell/>
-                    <TableCell/>
-                    <TableCell/>
-                </TableRow>
-            </TableHead>
             <TableBody>
                 {context.nfts.map(nft => (
                     <TableRow>
-                        <TableCell>{nft.isLocked}</TableCell>
-                        <TableCell><img className={classes.img} src = {nft.url} alt='nft' /></TableCell>
-                        <TableCell>{nft.id}</TableCell>
-                        <TableCell>{nft.name}</TableCell>
-                        <TableCell><img src = {nft.category} alt='category' /></TableCell>
-                        <TableCell><img src = {nft.item} alt='item' /></TableCell>
-                        <TableCell>{nft.level}</TableCell>
+                        <TableCell><NftTableCell nft={nft}/></TableCell>
                     </TableRow>
                 ))}
             </TableBody>

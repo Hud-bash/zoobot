@@ -19,9 +19,23 @@ class MarketHistoryRepository extends ServiceEntityRepository
         parent::__construct($registry, MarketHistory::class);
     }
 
-    public function findAllDescending(string $column): array
+    public function getCount()
     {
-        return $this->findBy(array(), array($column => 'DESC'));
+        return $this->createQueryBuilder('m')
+            ->select('count(m.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    // 100 can be anything.  100 results seems like a large, yet small enough set to send for my purposes.
+    public function findByPaginate($value): array
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.id')
+            ->setFirstResult($value[0]['page'])
+            ->setMaxResults($value[0]['skip'] * 100)
+            ->getQuery()
+            ->getResult();
     }
 
     public function topBuyer(int $x)

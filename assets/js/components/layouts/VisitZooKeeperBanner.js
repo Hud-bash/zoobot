@@ -11,22 +11,26 @@ export default function VisitZooKeeperBanner()
             padding: theme.spacing(2),
             textAlign: 'center',
             color: theme.palette.text.primary,
+            backgroundColor: "inherit",
             boxShadow: "none",
-            backgroundColor: "transparent",
+            fontSize: 35,
         },
     }));
 
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
-            <Box borderRadius={16} borderColor="#BD9A7A" border={8}>
+        <div>
+            <Box borderRadius={50} borderColor="#BD9A7A" border={8}>
                 <Grid
                 container
                 direction="row"
                 justify="center"
                 alignItems="center"
                 >
+                    <Grid item>
+                        <Paper className={classes.paper}>Buy Now</Paper>
+                    </Grid>
                     <Grid item>
                         <Paper className={classes.paper}><img src={"img/zoo_logo.svg"} width="150px" alt="zookeeper_logo"/></Paper>
                     </Grid>

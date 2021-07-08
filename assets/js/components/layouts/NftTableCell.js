@@ -117,9 +117,24 @@ const NftTableCell = (props) => {
                              return props.nft.level;
                      }
                     })()}
-                    <Box>
-                        Card #{props.nft.nft_id}
-                    </Box>
+                    <Grid container spacing={3}>
+                        <Grid item xs />
+                        <Grid item xs={6}>
+                            Card #{props.nft.nft_id}
+                        </Grid>
+                        <Grid item xs>
+                            {(() => {
+                                switch (props.nft.isLocked) {
+                                    case 1:
+                                        return (
+                                        <img src={'img/locked.png'} width={20} align={'left'} alt='locked-nft'/>
+                                        );
+                                    default:
+                                        return '';
+                                }
+                            })()}
+                        </Grid>
+                    </Grid>
                 </Box>
             </div>
         </Box>
