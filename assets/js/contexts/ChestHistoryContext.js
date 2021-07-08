@@ -7,7 +7,9 @@ class ChestHistoryContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            count: 0,
             chesties: [],
+            topwallets: [],
         };
         this.readChestHistory();
     }
@@ -22,9 +24,12 @@ class ChestHistoryContextProvider extends React.Component {
         axios.get('/api/chest-history')
             .then(response => {
                 this.setState({
+                    count: response.data.count,
                     chesties: response.data.history,
+                    topwallets: response.data.topchesties,
                 });
             }).catch(error => {
+            console.error('ERROR FROM readChestHistory()');
             console.error(error);
         })
     }

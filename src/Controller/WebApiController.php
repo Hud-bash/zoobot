@@ -40,11 +40,15 @@ class WebApiController extends AbstractController
     }
 
     /**
-     * @Route("/chest-history", name="api-chest-history")
+     * @Route("/chest-history/{page}-{skip}", name="api-chest-history", requirements={"page"="\d+"})
      */
-    public function ApiChestHistory(): JsonResponse
+    public function ApiChestHistory($page = 1, $skip = 1): JsonResponse
     {
-        return $this->json($this->zooWeb->RenderChestHistory());
+        $paginate[] = array(
+            'page' => $page,
+            'skip' => $skip
+        );
+        return $this->json($this->zooWeb->RenderChestHistory($paginate));
     }
 
     /**

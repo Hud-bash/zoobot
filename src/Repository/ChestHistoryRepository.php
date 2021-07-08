@@ -19,9 +19,23 @@ class ChestHistoryRepository extends ServiceEntityRepository
         parent::__construct($registry, ChestHistory::class);
     }
 
-    public function findAllDescending(string $column): array
+    public function getCount()
     {
-        return $this->findBy(array(), array($column => 'DESC'));
+        return $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    // 100 can be anything.  100 results seems like a large, yet small enough set to send for my purposes.
+    public function findByPaginate($value): array
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.id')
+            ->setFirstResult($value[0]['page'])
+            ->setMaxResults($value[0]['skip'] * 100)
+            ->getQuery()
+            ->getResult();
     }
 
     public function topChesties(int $x)
@@ -36,7 +50,7 @@ class ChestHistoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findbywallet(string $wallet)
+    public function findByWallet(string $wallet)
     {
         return $this->createQueryBuilder('c')
             ->where('c.wallet = :val')

@@ -18,7 +18,10 @@ function Paginator(props) {
 
     return (
         <div className={classes.root}>
-            <Pagination count={Math.floor(props.count / skip)} variant="outlined" color="secondary" page={props.page}/>
+            <Pagination
+                    count={Math.floor(props.count / skip)}
+                    variant="outlined" color="secondary"
+                    page={props.page}/>
         </div>
     );
 }

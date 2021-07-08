@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import {ChestHistoryContext} from "../contexts/ChestHistoryContext";
 import {makeStyles, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import Paginator from "./layouts/Paginator";
 
 const useStyles = makeStyles((theme) => ({
     img: {
@@ -14,6 +15,7 @@ function ChestHistory() {
 
     return (
         <Table>
+            <Paginator count={context.count} />
             <TableHead>
                 <TableRow>
                     <TableCell>Nft</TableCell>
@@ -27,11 +29,11 @@ function ChestHistory() {
             <TableBody>
                 {context.chesties.map(chest => (
                     <TableRow>
-                        <TableCell>{chest.nft}</TableCell>
+                        <TableCell></TableCell>
                         <TableCell><img className={classes.img} src = {chest.type} alt='chest_type' /></TableCell>
                         <TableCell>{chest.amount}</TableCell>
-                        <TableCell>{chest.name}</TableCell>
-                        <TableCell>{chest.animal}</TableCell>
+                        <TableCell>{chest.wallet.name}</TableCell>
+                        <TableCell>{chest.wallet.animal}</TableCell>
                         <TableCell>{chest.timestamp}</TableCell>
                     </TableRow>
                 ))}

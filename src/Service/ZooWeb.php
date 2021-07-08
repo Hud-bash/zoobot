@@ -26,32 +26,30 @@ class ZooWeb
         return $outNft;
     }
 
-    public function RenderChestHistory(): array
+    public function RenderChestHistory($paginate): array
     {
-        $inHistory = $this->em->getRepository('App:ChestHistory')->findAllDescending('block');
+        $inHistory = $this->em->getRepository('App:ChestHistory')->findByPaginate($paginate);
         $chests = array();
         $top20 = $this->em->getRepository('App:ChestHistory')->topChesties(20);
+        $count = $this->em->getRepository('App:ChestHistory')->getCount();
 
         foreach ($inHistory as $chest)
         {
             $nft = (is_null($chest->getNft()) ? "" : $chest->getNft()->toArray());
-            $wallet = (is_null($chest->getWallet()) ? null : $chest->getWallet());
-
             $add = array(
                 'txHash' => $chest->getTxHash(),
                 'timestamp' => $chest->getTimestamp(),
                 'nft' => $nft,
-                'wallet_id' => $wallet->getWalletId(),
-                'type' => $this->setChestType($chest->getType(), $nft),
+                'wallet' => $chest->getWallet()->toArray(),
+                'type' => $chest->getType(),
                 'amount' => $chest->getAmount(),
-                'name' => $wallet->getName(),
-                'animal' => $wallet->getAnimal()
             );
 
             $chests[] = $add;
         };
 
         return array(
+            'count' => $count,
             'history' => $chests,
             'topchesties' => $top20);
     }
