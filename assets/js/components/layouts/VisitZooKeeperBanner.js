@@ -25,7 +25,7 @@ export default function VisitZooKeeperBanner()
                 <Grid
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
                 >
                     <Grid item>

@@ -30,7 +30,7 @@ class TestCommand extends Command {
     {
         $output->writeln('');
         $output->writeln('--Running Test--');
-        $output->writeln($this->zooBotSQL->FixBoostPercent());
+        $output->writeln($this->zooBotSQL->UpdateNftLock());
         return Command::SUCCESS;
     }
 }

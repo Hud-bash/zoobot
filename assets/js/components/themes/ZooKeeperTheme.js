@@ -1,6 +1,6 @@
 //REACT
 import React from 'react';
-import {createMuiTheme, CssBaseline, MuiThemeProvider, responsiveFontSizes} from '@material-ui/core';
+import {createTheme, CssBaseline, MuiThemeProvider, responsiveFontSizes} from '@material-ui/core';
 import LanaPixelWoff2 from '../themes/fonts/LanaPixel.woff2';
 
 const lanapixel = {
@@ -11,7 +11,7 @@ const lanapixel = {
     `,
 };
 
-const theme = createMuiTheme({
+const theme = createTheme({
 
     palette: {
         type: 'light',

@@ -8,23 +8,28 @@ class ChestHistoryContextProvider extends React.Component {
         super(props);
         this.state = {
             count: 0,
+            page: 1,
+            resultsPerPage: 50,
             chesties: [],
             topwallets: [],
         };
-        this.readChestHistory();
+        this.readChestHistory([this.state.page, this.state.resultsPerPage]);
     }
 
     //create
-    createChestHistory() {
-
+    createChestHistory()
+    {
     }
 
     //read
-    readChestHistory() {
-        axios.get('/api/chest-history')
+    readChestHistory(props)
+    {
+        axios.get('/api/chest-history/' + props[0] + '-' + props[1])
             .then(response => {
                 this.setState({
                     count: response.data.count,
+                    page: props[0],
+                    resultsPerPage: props[1],
                     chesties: response.data.history,
                     topwallets: response.data.topchesties,
                 });
@@ -34,18 +39,19 @@ class ChestHistoryContextProvider extends React.Component {
         })
     }
     //update
-    updateChestHistory() {
-
+    updateChestHistory()
+    {
     }
     //delete
-    deleteChestHistory() {
-
+    deleteChestHistory()
+    {
     }
 
     render() {
         return (
             <ChestHistoryContext.Provider value={{
                 ...this.state,
+                readChestHistory: this.readChestHistory.bind(this),
                 createChestHistory: this.createChestHistory.bind(this),
                 updateChestHistory: this.updateChestHistory.bind(this),
                 deleteChestHistory: this.deleteChestHistory.bind(this),

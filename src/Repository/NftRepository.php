@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class NftRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Nft::class);
@@ -21,49 +22,45 @@ class NftRepository extends ServiceEntityRepository
 
     public function getCount()
     {
-        return $this->createQueryBuilder('m')
-            ->select('count(m.id)')
+        return $this->createQueryBuilder('n')
+            ->select('count(n.id)')
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    // 100 can be anything.  100 results seems like a large, yet small enough set to send for my purposes.
     public function findByPaginate($value): array
     {
-        return $this->createQueryBuilder('m')
-            ->orderBy('m.id')
-            ->setFirstResult($value[0]['page'])
-            ->setMaxResults($value[0]['skip'] * 100)
+        return $this->createQueryBuilder('n')
+            ->orderBy('n.id', 'DESC')
+            ->setFirstResult(($value['page'] - 1) * $value['skip'])
+            ->setMaxResults($value['skip'])
             ->getQuery()
             ->getResult();
     }
 
     public function findOneByNftId($value): Nft
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.nft_id = :val')
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.nft_id = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getOneOrNullResult();
     }
 
-    public function UpdateLockState(array $locked)
+    public function updateLockState(array $locked)
     {
         // Set isLocked to true (1) for nft_ids in json webget
-        $this->createQueryBuilder('')
-            ->update("App:Nft", 'e')
-            ->set('e.isLocked', 1)
-            ->where('e.nft_id IN (:ids)')
+        $this->createQueryBuilder('n')
+            ->set('n.isLocked', 1)
+            ->where('n.nft_id IN (:ids)')
             ->setParameter('ids', $locked)
             ->getQuery()
             ->getResult();
 
         // Set isLocked to false (0) for nft_ids no longer present in json webget
-        $this->createQueryBuilder('')
-            ->update("App:Nft", 'e')
-            ->set('e.isLocked', 0)
-            ->where('e.isLocked = 1 AND e.nft_id NOT IN (:ids)')
+        $this->createQueryBuilder('n')
+            ->set('n.isLocked', 0)
+            ->where('n.isLocked = 1 AND n.nft_id NOT IN (:ids)')
             ->setParameter('ids', $locked)
             ->getQuery()
             ->getResult();

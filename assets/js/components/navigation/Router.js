@@ -1,9 +1,9 @@
 //REACT
 import React from 'react';
 //ROUTER
-import BrowserRouter from 'react-router-dom/BrowserRouter';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
+import {BrowserRouter} from 'react-router-dom';
+import {Route} from 'react-router-dom';
+import {Switch} from 'react-router-dom';
 //MUI
 import {makeStyles} from "@material-ui/core";
 //CUSTOM
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     wrapper: {
         marginLeft: "220px",
         marginRight: "20px",
+        marginTop: "20px"
     },
 }));
 

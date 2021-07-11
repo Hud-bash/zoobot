@@ -14,152 +14,116 @@ class ZooWeb
         $this->em = $em;
     }
 
-    public function RenderNFT(): array
+    public function RenderNFT($paginate): array
     {
-        $inNft = $this->em->getRepository('App:Nft')->findAllDescending('nft_id');
-        $outNft = array();
+        $nfts = $this->em->getRepository('App:Nft')->findByPaginate($paginate);
+        $count = $this->em->getRepository('App:Nft')->getCount();
 
-        foreach ($inNft as $nft)
-        {
-        $outNft[] = $nft->toArray();
-        }
-        return $outNft;
+        return [
+            'count' => $count,
+            'nfts' => $this->entityToArray($nfts)
+        ];
     }
 
     public function RenderChestHistory($paginate): array
     {
-        $inHistory = $this->em->getRepository('App:ChestHistory')->findByPaginate($paginate);
-        $chests = array();
-        $top20 = $this->em->getRepository('App:ChestHistory')->topChesties(20);
+        $chests = $this->em->getRepository('App:ChestHistory')->findByPaginate($paginate);
         $count = $this->em->getRepository('App:ChestHistory')->getCount();
+        $top20 = $this->em->getRepository('App:ChestHistory')->topChesties(20);
 
-        foreach ($inHistory as $chest)
-        {
-            $nft = (is_null($chest->getNft()) ? "" : $chest->getNft()->toArray());
-            $add = array(
-                'txHash' => $chest->getTxHash(),
-                'timestamp' => $chest->getTimestamp(),
-                'nft' => $nft,
-                'wallet' => $chest->getWallet()->toArray(),
-                'type' => $chest->getType(),
-                'amount' => $chest->getAmount(),
-            );
-
-            $chests[] = $add;
-        };
-
-        return array(
+        return [
             'count' => $count,
-            'history' => $chests,
-            'topchesties' => $top20);
+            'history' => $this->entityToArray($chests),
+            'topchesties' => $top20];
     }
 
-    public function RenderMarket(): array
+    public function RenderMarket($paginate): array
     {
-        $inMarket = $this->em->getRepository('App:Market')->findAllDescending('timestamp');
-        $markets = array();
+        $markets = $this->em->getRepository('App:Market')->findByPaginate($paginate);
+        $count = $this->em->getRepository('App:Market')->getCount();
 
-        foreach ($inMarket as $market)
-        {
-            $add = array(
-                'nft' => $this->em->getRepository('App:Nft')->findOneByNftId($market->getNft())->toArray(),
-                'seller' => $this->em->getRepository('App:Wallet')->findOneByWalletId($market->getSeller())->toArray(),
-                'price' => $market->getPrice(),
-                'currency' => $market->getCurrency(),
-                'timestamp' => $market->getTimestamp(),
-                'chainId' => $market->getChainId()
-            );
-            $markets[] = $add;
-        }
-        return $markets;
+        return [
+            'count' => $count,
+            'market' => $this->entityToArray($markets)
+        ];
     }
 
     public function RenderMarketHistory($paginate): array
     {
-        $inHistory = $this->em->getRepository('App:MarketHistory')->findByPaginate($paginate);
-        $recordCount = $this->em->getRepository('App:MarketHistory')->getCount();
-        $markets = array();
+        $sales = $this->em->getRepository('App:MarketHistory')->findByPaginate($paginate);
+        $count = $this->em->getRepository('App:MarketHistory')->getCount();
+        $salesArray = array();
 
-        foreach ($inHistory as $market)
+        foreach ($sales as $sale)
         {
-            $nft = $market->getNft()->toArray();
-            $buyer = $market->getBuyer()->toArray();
-            $seller = $market->getSeller()->toArray();
-            $currency = $this->em->getRepository('App:Token')->findOneBy(['address'=>$market->getCurrency()]);
+            $nft = $sale->getNft()->toArray();
+            $buyer = $sale->getBuyer()->toArray();
+            $seller = $sale->getSeller()->toArray();
+            $currency = $this->em->getRepository('App:Token')->findOneBy(['address'=>$sale->getCurrency()])->toArray();
 
-            $add = array(
+            $salesArray[] = array(
                 'nft' => $nft,
                 'seller' => $seller,
                 'buyer' => $buyer,
-                'price' => $market->getPrice(),
-                'currency' => $currency->getLogo(),
-                'timestamp' => $market->getTimestamp(),
-                'chainId' => $market->getChainId(),
-                'txHash' => $market->getTxHash()
+                'price' => $sale->getPrice(),
+                'currency' => $currency,
+                'timestamp' => $sale->getTimestamp(),
+                'chainId' => $sale->getChainId(),
+                'txHash' => $sale->getTxHash()
             );
-            $markets[] = $add;
         }
-        return array(
-            'count' => $recordCount,
-            'history' => $markets,
-            'topsellers' => $this->em->getRepository('App:MarketHistory')->topSeller(10),
-            'topbuyers' => $this->em->getRepository('App:MarketHistory')->topBuyer(10)
-        );
+        return [
+            'count' => $count,
+            'history' => $salesArray,
+            'topSellers' => $this->em->getRepository('App:MarketHistory')->topSeller(10),
+            'topBuyers' => $this->em->getRepository('App:MarketHistory')->topBuyer(10)
+        ];
+    }
 
+    public function RenderWallet($paginate): array
+    {
+        $wallets = $this->em->getRepository('App:Wallet')->findByPaginate($paginate);
+        $count = $this->em->getRepository('App:Wallet')->getCount();
+
+        return [
+            'count' => $count,
+            'wallets' => $this->entityToArray($wallets)
+        ];
     }
 
     public function RenderProfile(string $address): array
     {
-        $user = $this->em->getRepository('App:Wallet')->findOneBy(['wallet_id' => $address])->toArray();
+        $user = $this->em->getRepository('App:Wallet')->findOneBy(['wallet_id' => $address]);
         $chesties = $this->em->getRepository('App:ChestHistory')->findbywallet($address);
         $market = $this->em->getRepository('App:Market')->findByWalletId($address);
-        $marketHistory = $this->em->getRepository('App:MarketHistory')->findbyWalletId($address);
+        $salesHistory = $this->em->getRepository('App:MarketHistory')->sellerByWalletId($address);
+        $buyHistory = $this->em->getRepository('App:MarketHistory')->buyerByWalletId($address);
 
-        $profile[] = array(
-            'profile' => $user,
-            'chesties' => $chesties,
-            'market' => $market,
-            'marketHistory' => $marketHistory,
-        );
-
-        return $profile;
+        return [
+            'profile' => $this->entityToArray($user),
+            'chesties' => $this->entityToArray($chesties),
+            'market' => $this->entityToArray($market),
+            'salesHistory' => $this->entityToArray($salesHistory),
+            'buyHistory' => $this->entityToArray($buyHistory),
+        ];
     }
 
-    public function RenderWallet(): array
+    //entity needs to have the toArray() function
+    public function entityToArray($entity)
     {
-        $inWallet = $this->em->getRepository('App:Wallet')->findAll();
-        $outWallet[] = array();
-
-        foreach ($inWallet as $wallet)
+        if(is_array($entity))
         {
-            $outWallet[] = array(
-                'wallet' => $wallet->getWalletId(),
-                'name' => $wallet->getName(),
-                'animal' => $wallet->getAnimal()
-            );
-        }
-
-        return $outWallet;
-    }
-
-    private function setChestType(string $type, $nft): String
-    {
-        if(str_contains($type, 'ilver'))
-        {
-            if($nft == "")
+            $output = [];
+            foreach ($entity as $item)
             {
-                return '/img/silverboxfail42x42.png';
-            }
-            else
-            {
-                return '/img/silverbox42x42.png';
+                $output[] = $item->toArray();
             }
         }
         else
         {
-            return '/img/goldenbox42x42.png';
+            $output = $entity;
         }
+
+        return $output;
     }
-
-
 }

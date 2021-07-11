@@ -14,9 +14,28 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WalletRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Wallet::class);
+    }
+
+    public function getCount()
+    {
+        return $this->createQueryBuilder('w')
+            ->select('count(w.wallet_id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findByPaginate($value): array
+    {
+        return $this->createQueryBuilder('w')
+            ->orderBy('w.wallet_id', 'DESC')
+            ->setFirstResult(($value['page'] - 1) * $value['skip'])
+            ->setMaxResults($value['skip'])
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -26,20 +45,18 @@ class WalletRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('w')
             ->select('w')
-            ->Where('w.name is null OR w.animal is null')
+            ->where('w.name is null OR w.animal is null')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findOneByWalletId($value): ?Wallet
     {
         return $this->createQueryBuilder('w')
-            ->andWhere('w.wallet_id = :val')
+            ->where('w.wallet_id = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getOneOrNullResult();
     }
 
     // /**

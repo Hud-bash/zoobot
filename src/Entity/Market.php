@@ -28,7 +28,8 @@ class Market
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Token::class, inversedBy="address", cascade={"persist"})
+     * @ORM\JoinColumn(name="currency_id", nullable=false, referencedColumnName="address")
      */
     private $currency;
 
@@ -72,12 +73,12 @@ class Market
         return $this;
     }
 
-    public function getCurrency(): ?string
+    public function getCurrency(): ?Token
     {
         return $this->currency;
     }
 
-    public function setCurrency(string $currency): self
+    public function setCurrency(Token $currency): self
     {
         $this->currency = $currency;
 
@@ -130,5 +131,19 @@ class Market
         $this->seller = $seller;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return (
+            [
+            'nft'=>$this->nft->toArray(),
+            'seller'=>$this->seller->toArray(),
+            'chain_id'=>$this->chain_id,
+            'price'=>$this->price,
+            'currency'=>$this->currency->toArray(),
+            'timestamp'=>$this->timestamp,
+            ]
+        );
     }
 }

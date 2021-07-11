@@ -20,13 +20,13 @@ const NftTableCell = (props) => {
     const classes = useStyles();
 
     return (
-        <Box borderRadius={16} borderColor="primary.main" border={4} width={180} height={160} boxShadow={7}>
+        <Box borderRadius={16} borderColor="primary.main" border={4} width={200} height={160} boxShadow={7}>
             <div align="center">
                 <Box>
                     <h4>{props.nft.name}</h4>
                 </Box>
                 <div className={classes.root}>
-                    <Grid container justify="center" spacing={2}>
+                    <Grid container justifyContent="center" spacing={2}>
                         <Grid key={props.nft.boost} item>
                             <Paper className={classes.paper} elevation={0}>
                                 <div><img src={'img/rocket24x24.png'}  alt='boost'/></div>

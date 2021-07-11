@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ChestHistoryRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ChestHistory::class);
@@ -26,14 +27,13 @@ class ChestHistoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
-    // 100 can be anything.  100 results seems like a large, yet small enough set to send for my purposes.
+    
     public function findByPaginate($value): array
     {
         return $this->createQueryBuilder('c')
-            ->orderBy('c.id')
-            ->setFirstResult($value[0]['page'])
-            ->setMaxResults($value[0]['skip'] * 100)
+            ->orderBy('c.id', 'DESC')
+            ->setFirstResult(($value['page'] - 1) * $value['skip'])
+            ->setMaxResults($value['skip'])
             ->getQuery()
             ->getResult();
     }
@@ -52,7 +52,7 @@ class ChestHistoryRepository extends ServiceEntityRepository
 
     public function findByWallet(string $wallet)
     {
-        return $this->createQueryBuilder('c')
+         return $this->createQueryBuilder('c')
             ->where('c.wallet = :val')
             ->setParameter('val', $wallet)
             ->orderBy('c.timestamp', 'DESC')

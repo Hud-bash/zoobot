@@ -12,12 +12,6 @@ class Token
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $address;
@@ -41,11 +35,6 @@ class Token
      * @ORM\Column(type="string", length=255)
      */
     private $logo;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getAddress(): ?string
     {
@@ -105,5 +94,18 @@ class Token
         $this->logo = $logo;
 
         return $this;
+    }
+
+    public function toArray()
+    {
+        return (
+            [
+                'address'=>$this->address,
+                'name'=>$this->name,
+                'symbol'=>$this->symbol,
+                'decimal'=>$this->decimal_length,
+                'logo'=>$this->logo
+            ]
+        );
     }
 }

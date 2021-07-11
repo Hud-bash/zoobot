@@ -158,4 +158,20 @@ class ChestHistory
 
         return $this;
     }
+
+    public function toArray()
+    {
+        return
+            [
+                'id'=> $this->id,
+                'nft'=> is_null($this->nft) ? "" : $this->nft->toArray(),
+                'wallet'=> $this->wallet->toArray(),
+                'type'=> $this->type,
+                'amount'=> $this->amount,
+                'timestamp'=> $this->timestamp,
+                'chain_id'=> $this->chain_id,
+                'block'=> $this->block,
+                'txHash'=> $this->txHash,
+            ];
+    }
 }

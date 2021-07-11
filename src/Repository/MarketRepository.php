@@ -18,8 +18,25 @@ class MarketRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Market::class);
     }
+    public function getCount()
+    {
+        return $this->createQueryBuilder('m')
+            ->select('count(m.nft)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-    public function CleanMarket(array $currentMarket)
+    public function findByPaginate($value): array
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.nft', 'DESC')
+            ->setFirstResult(($value['page'] - 1) * $value['skip'])
+            ->setMaxResults($value['skip'])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function cleanMarket(array $currentMarket)
     {
         //Purge table of any listings with nft_id
         $this->createQueryBuilder('')
@@ -36,13 +53,7 @@ class MarketRepository extends ServiceEntityRepository
             ->andWhere('m.nft = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
-    }
-
-    public function findAllDescending(string $column): array
-    {
-        return $this->findBy(array(), array($column => 'DESC'));
+            ->getOneOrNullResult();
     }
 
     public function findByWalletId($wallet)

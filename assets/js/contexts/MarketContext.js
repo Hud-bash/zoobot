@@ -7,9 +7,12 @@ class MarketContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            count: 0,
+            page: 1,
+            resultsPerPage: 50,
             listings: [],
         };
-        this.readMarket();
+        this.readMarket([this.state.page, this.state.resultsPerPage]);
     }
 
     //create
@@ -18,11 +21,14 @@ class MarketContextProvider extends React.Component {
     }
 
     //read
-    readMarket() {
-        axios.get('/api/market')
+    readMarket(props) {
+        axios.get('/api/market/' + props[0] + '-' + props[1])
             .then(response => {
                 this.setState({
-                    listings: response.data,
+                    count: response.data.count,
+                    page: props[0],
+                    resultsPerPage: props[1],
+                    listings: response.data.market,
                 });
             }).catch(error => {
                 console.error(error);
@@ -42,6 +48,7 @@ class MarketContextProvider extends React.Component {
             <MarketContext.Provider value={{
                 ...this.state,
                 createMarket: this.createMarket.bind(this),
+                readMarket: this.readMarket.bind(this),
                 updateMarket: this.updateMarket.bind(this),
                 deleteMarket: this.deleteMarket.bind(this),
                 setMessage: (message) => this.setState({message: message}),

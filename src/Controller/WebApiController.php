@@ -20,19 +20,23 @@ class WebApiController extends AbstractController
     }
 
     /**
-     * @Route("/market", name="api-market")
+    @Route("/market/{page}-{skip}", name="api-market", requirements={"page"="\d+","skip"="\d+"})
      */
-    public function ApiMarket(): JsonResponse
+    public function ApiMarket($page = 1, $skip = 25): JsonResponse
     {
-        return $this->json($this->zooWeb->RenderMarket());
+        $paginate = array(
+            'page' => $page,
+            'skip' => $skip
+        );
+        return $this->json($this->zooWeb->RenderMarket($paginate));
     }
 
     /**
-     * @Route("/market-history/{page}-{skip}", name="api-market-history", requirements={"page"="\d+"})
+     * @Route("/market-history/{page}-{skip}", name="api-market-history", requirements={"page"="\d+","skip"="\d+"})
      */
-    public function ApiMarketHistory($page = 1, $skip = 1): JsonResponse
+    public function ApiMarketHistory($page = 1, $skip = 25): JsonResponse
     {
-        $paginate[] = array(
+        $paginate = array(
             'page' => $page,
             'skip' => $skip
             );
@@ -40,11 +44,11 @@ class WebApiController extends AbstractController
     }
 
     /**
-     * @Route("/chest-history/{page}-{skip}", name="api-chest-history", requirements={"page"="\d+"})
+     * @Route("/chest-history/{page}-{skip}", name="api-chest-history", requirements={"page"="\d+","skip"="\d+"})
      */
-    public function ApiChestHistory($page = 1, $skip = 1): JsonResponse
+    public function ApiChestHistory($page = 1, $skip = 25): JsonResponse
     {
-        $paginate[] = array(
+        $paginate = array(
             'page' => $page,
             'skip' => $skip
         );
@@ -52,19 +56,27 @@ class WebApiController extends AbstractController
     }
 
     /**
-     * @Route("/nft", name="api-nft")
+     * @Route("/nft/{page}-{skip}", name="api-nft", requirements={"page"="\d+","skip"="\d+"})
      */
-    public function ApiNft(): JsonResponse
+    public function ApiNft($page = 1, $skip = 25): JsonResponse
     {
-        return $this->json($this->zooWeb->RenderNFT());
+        $paginate = array(
+            'page' => $page,
+            'skip' => $skip
+        );
+        return $this->json($this->zooWeb->RenderNFT($paginate));
     }
 
     /**
-     * @Route("/wallet", name="api-wallet")
+     * @Route("/wallet/{page}-{skip}", name="api-wallet", requirements={"page"="\d+","skip"="\d+"})
      */
-    public function ApiWallet(): JsonResponse
+    public function ApiWallet($page = 1, $skip = 25): JsonResponse
     {
-        return $this->json($this->zooWeb->RenderWallet());
+        $paginate = array(
+            'page' => $page,
+            'skip' => $skip
+        );
+        return $this->json($this->zooWeb->RenderWallet($paginate));
     }
 
     /**

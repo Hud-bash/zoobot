@@ -1,9 +1,6 @@
 import React from 'react';
-import {makeStyles} from "@material-ui/core";
+import {Box, makeStyles} from "@material-ui/core";
 import {Pagination} from "@material-ui/lab";
-
-const skip = 100;
-const page = 1;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,13 +13,23 @@ const useStyles = makeStyles((theme) => ({
 function Paginator(props) {
     const classes = useStyles();
 
+    const [page, setPage] = React.useState(1);
+
+    const handleChange = (event, newPage) => {
+        console.log(newPage);
+        setPage(newPage);
+    };
+
     return (
-        <div className={classes.root}>
+        <Box>
             <Pagination
-                    count={Math.floor(props.count / skip)}
-                    variant="outlined" color="secondary"
-                    page={props.page}/>
-        </div>
+                variant={"outlined"}
+                color={"secondary"}
+                count={Math.floor(props.count / props.resultsPerPage)}
+                page={page}
+                onChange={handleChange}
+            />
+        </Box>
     );
 }
 

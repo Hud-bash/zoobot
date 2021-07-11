@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MarketHistoryRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, MarketHistory::class);
@@ -27,13 +28,12 @@ class MarketHistoryRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    // 100 can be anything.  100 results seems like a large, yet small enough set to send for my purposes.
     public function findByPaginate($value): array
     {
         return $this->createQueryBuilder('m')
-            ->orderBy('m.id')
-            ->setFirstResult($value[0]['page'])
-            ->setMaxResults($value[0]['skip'] * 100)
+            ->orderBy('m.id', 'DESC')
+            ->setFirstResult(($value['page'] - 1) * $value['skip'])
+            ->setMaxResults($value['skip'])
             ->getQuery()
             ->getResult();
     }
@@ -62,25 +62,22 @@ class MarketHistoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findbyWalletId($value)
+    public function buyerByWalletId($value)
     {
-        $buy = $this->createQueryBuilder('m')
-            ->andWhere('m.buyer = :val')
+        return $this->createQueryBuilder('m')
+            ->Where('m.buyer = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult();
+    }
 
-        $sell = $this->createQueryBuilder('m')
-            ->andWhere('m.seller = :val')
+    public function sellerByWalletId($value)
+    {
+        return $this->createQueryBuilder('m')
+            ->Where('m.seller = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult();
-
-        return
-            [
-                'sell' => $sell,
-                'buy' => $buy,
-            ];
     }
 
     // /**

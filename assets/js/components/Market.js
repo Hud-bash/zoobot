@@ -6,11 +6,12 @@ import {
     makeStyles,
     Table,
     TableBody,
-    TableCell,
+    TableCell, TableContainer,
     TableRow,
 } from "@material-ui/core";
 import NftTableCell from "./layouts/NftTableCell";
 import VisitZooKeeperBanner from "./layouts/VisitZooKeeperBanner";
+import {Pagination} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,19 +27,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 function Market() {
     const context = useContext(MarketContext);
     const classes = useStyles();
+
+    const handleChange = (event, newPage) => {
+        context.readMarket([newPage, context.resultsPerPage])
+    };
+
     return (
-        <Grid container justify={"space-around"}>
+        <Grid container justifyContent={"space-around"}>
             <Grid item>
             <Container maxWidth="sm">
-                <Box maxWidth={'80%'} style={{paddingTop: '50px', paddingBottom: '20px',}} alignItems="center" flexGrow="row" >
-                    <Link href={'https://www.zookeeper.finance/market'} target={'_blank'}>
-                        <VisitZooKeeperBanner />
-                    </Link>
-                </Box>
+                <Pagination
+                    variant={"outlined"}
+                    color={"secondary"}
+                    count={Math.floor(context.count / context.resultsPerPage)}
+                    page={context.page}
+                    onChange={handleChange}
+                />
                 <Table>
                     <TableBody>
                         {context.listings.map(listing => (
@@ -47,7 +54,7 @@ function Market() {
                                 <TableCell>
                                     <Box display="flex">
                                         <Box marginRight={'.5em'} alignContent='center'>{listing.price}</Box>
-                                        <Box alignContent='center'><img className={classes.img} src = {listing.currency} alt='token'/></Box>
+                                        <Box alignContent='center'><img className={classes.img} src = {listing.currency.logo} alt='token'/></Box>
                                     </Box>
                                 </TableCell>
                                 <TableCell>{listing.seller.name} {listing.seller.animal}</TableCell>
@@ -58,7 +65,7 @@ function Market() {
                 </Table>
             </Container>
             </Grid>
-            <Grid item alignContent={"flex-end"}>
+            <Grid item>
                 <Link href={'https://www.zookeeper.finance/market'} target={'_blank'}>
                     <img className={classes.sign} src={'img/market-sign.png'} alt='market-sign'/>
                 </Link>

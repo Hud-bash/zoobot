@@ -88,7 +88,7 @@ class ZooBotSQL {
             {
                 $market = new Market();
                 $market->setPrice($row->price / pow(10, $currency->getDecimalLength()));
-                $market->setCurrency($currency->getLogo());
+                $market->setCurrency($currency);
                 $market->setExpiration($row->expiration);
                 $market->setSeller($wallet);
                 $market->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
@@ -105,7 +105,7 @@ class ZooBotSQL {
                 if($row->orderId != $nft->getInMarket()->getChainId())
                 {
                     $nft->getInMarket()->setPrice($row->price / pow(10, $currency->getDecimalLength()));
-                    $nft->getInMarket()->setCurrency($currency->getLogo());
+                    $nft->getInMarket()->setCurrency($currency);
                     $nft->getInMarket()->setExpiration($row->expiration);
                     $nft->getInMarket()->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s', $row->createTime)));
                     $nft->getInMarket()->setChainId($row->orderId);
@@ -145,7 +145,7 @@ class ZooBotSQL {
 
                 $marketHistory = new MarketHistory();
                 $marketHistory->setPrice($row->price);
-                $marketHistory->setCurrency($currency->getAddress());
+                $marketHistory->setCurrency($currency);
                 $marketHistory->setBuyer($this->MakeWallet($row->buyer));
                 $marketHistory->setSeller($this->MakeWallet($row->seller));
                 $marketHistory->setTimestamp(DateTime::createFromFormat('Y-m-d H:i:s', $correctDate));
@@ -263,7 +263,7 @@ class ZooBotSQL {
         return $this->em->getRepository('App:Nft')->findOneBy(['nft_id' => $id]);
     }
 
-    public function MakeToken(string $id): ?object
+    public function MakeToken(string $id): ?Token
     {
         $jsonUpdate = $this->zapi->tokenJson;
         $exists = $this->em->getRepository('App:Token')->findOneBy(['address' => $id]);
@@ -272,6 +272,7 @@ class ZooBotSQL {
             {
                 foreach ($jsonUpdate->tokens as $item)
                 {
+                    //chain 888 is the main net. 999 is testnet
                     if ($item->address == $id and $item->chainId == '888')
                     {
                         $token = new Token();

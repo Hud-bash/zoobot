@@ -14,9 +14,27 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TokenRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Token::class);
+    }
+    public function getCount()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findByPaginate($value): array
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.id', 'DESC')
+            ->setFirstResult(($value['page'] - 1) * $value['skip'])
+            ->setMaxResults($value['skip'])
+            ->getQuery()
+            ->getResult();
     }
 
     public function findOneBySymbol($value): Token
@@ -25,8 +43,7 @@ class TokenRepository extends ServiceEntityRepository
             ->andWhere('t.name = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getOneOrNullResult();
     }
 
     // /**
