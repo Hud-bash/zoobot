@@ -12,7 +12,6 @@ const lanapixel = {
 };
 
 const theme = createTheme({
-
     palette: {
         type: 'light',
         secondary: {
@@ -21,7 +20,6 @@ const theme = createTheme({
         primary: {
             main: '#00a99d',
         },
-
     },
     typography: {
         fontFamily: 'LanaPixel, sans-serif',
@@ -37,6 +35,14 @@ const theme = createTheme({
                 textDecoration: 'none',
                 "&:hover": {
                     textDecoration: 'none',
+                },
+            },
+        },
+        MuiButtonBase: {
+            root: {
+                outline: 'none',
+                focusVisible: {
+                    outline: 'none'
                 },
             },
         },

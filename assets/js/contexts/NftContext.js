@@ -9,7 +9,7 @@ class NftContextProvider extends React.Component {
         this.state = {
             count: 0,
             page: 1,
-            resultsPerPage: 50,
+            resultsPerPage: 25,
             nfts: [],
         };
         this.readNft([this.state.page, this.state.resultsPerPage]);
